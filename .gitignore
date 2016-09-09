@@ -1,0 +1,5 @@
+.DS_Store
+.idea
+target
+ka-upload.iml
+*.log
