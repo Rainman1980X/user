@@ -36,15 +36,15 @@ public class UserController {
                                              @RequestBody UserDto userDto) {
         return (new EditUserAction()).doActionOnUser(userRepository,mongoTemplate, authorization,correlationToken,userDto);
     }
-    @RequestMapping(value = "/api/v1/ka-user-store/setNewPassword", method = RequestMethod.PUT)
-    public ResponseEntity<HttpStatus> setNewPassword(@RequestHeader(value = "Authorization") String authorization,
+    @RequestMapping(value = "/api/v1/ka-user-store/changePassword", method = RequestMethod.PUT)
+    public ResponseEntity<HttpStatus> changePassword(@RequestHeader(value = "Authorization") String authorization,
                                              @RequestHeader(value = "CorrelationToken") String correlationToken,
                                              @RequestBody UserDto userDto) {
-        return (new SetNewPasswordAction()).doActionOnUser(userRepository,mongoTemplate, authorization,correlationToken,userDto);
+        return (new ChangePasswordAction()).doActionOnUser(userRepository,mongoTemplate, authorization,correlationToken,userDto);
     }
 
-    @RequestMapping(value = "/api/v1/ka-user-store/setRole", method = RequestMethod.PUT)
-    public ResponseEntity<HttpStatus> setRole(@RequestHeader(value = "Authorization") String authorization,
+    @RequestMapping(value = "/api/v1/ka-user-store/changeRole", method = RequestMethod.PUT)
+    public ResponseEntity<HttpStatus> changeRole(@RequestHeader(value = "Authorization") String authorization,
                                              @RequestHeader(value = "CorrelationToken") String correlationToken,
                                              @RequestBody UserDto userDto) {
         return (new ChangeRoleListAction()).doActionOnUser(userRepository,mongoTemplate, authorization,correlationToken,userDto);

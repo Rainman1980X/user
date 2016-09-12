@@ -21,9 +21,9 @@ import s3f.ka_user_store.interfaces.UserRepository;
  * Created by MSBurger on 12.09.2016.
  */
 @Service
-public class SetNewPasswordAction implements UserActions {
+public class ChangePasswordAction implements UserActions {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SetNewPasswordAction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangePasswordAction.class);
 
     @Autowired
     private UserRepository userRepository;
