@@ -16,33 +16,33 @@ import s3f.ka_user_store.interfaces.UserRepository;
  * Created by MSBurger on 12.09.2016.
  */
 @Service
-public class CreateUserAction implements UserActions {
+public class CreateUserAction implements UserActions<UserDto> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateUserAction.class);
 
     private UserRepository userRepository;
 
     @Override
-    public ResponseEntity<HttpStatus> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
-                                                     @RequestHeader(value = "Authorization") String authorization,
-                                                     @RequestHeader(value = "CorrelationToken") String correlationToken,
-                                                     @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
+                                                     String authorization,
+                                                     String correlationToken,
+                                                     UserDto userDto) {
         this.userRepository = userRepository;
         LOGGER.info("Create User");
         LOGGER.info(userDto.toString());
 
         if (hasDoubleEntry(userDto.getEmail())) {
             LOGGER.error("User is duplicate.");
-            return new ResponseEntity<HttpStatus>(HttpStatus.CONFLICT);
+            return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.CONFLICT);
         }
 
         try {
-            this.userRepository.save(userDto);
+            UserDto newUserDto = this.userRepository.save(userDto);
             LOGGER.info("User successful created");
-            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+            return new ResponseEntity<UserDto>(newUserDto,HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("User can't be saved", e);
-            return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<UserDto>(new UserDto(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -19,7 +19,7 @@ import s3f.ka_user_store.interfaces.UserRepository;
  * Created by MSBurger on 12.09.2016.
  */
 @Service
-public class EditUserAction implements UserActions {
+public class EditUserAction implements UserActions<UserDto> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditUserAction.class);
 
@@ -31,9 +31,9 @@ public class EditUserAction implements UserActions {
 
     @Override
     public ResponseEntity<HttpStatus> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
-                                                     @RequestHeader(value = "Authorization") String authorization,
-                                                     @RequestHeader(value = "CorrelationToken") String correlationToken,
-                                                     @RequestBody UserDto userDto) {
+                                                     String authorization,
+                                                     String correlationToken,
+                                                     UserDto userDto) {
         LOGGER.info("Edit User");
         LOGGER.info(userDto.toString());
 

@@ -60,7 +60,7 @@ public class UserControllerTest {
     }
     @Test
     public void createLogin() throws Exception {
-        ResponseEntity<HttpStatus> return0 = userController.create(authorization,authorization,userDto);
+        ResponseEntity<UserDto> return0 = userController.create(authorization,authorization,userDto);
         assertTrue(return0.getStatusCodeValue() == HttpStatus.OK.value());
     }
     @Test

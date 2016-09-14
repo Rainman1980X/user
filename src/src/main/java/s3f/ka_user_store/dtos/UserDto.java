@@ -1,26 +1,32 @@
 package s3f.ka_user_store.dtos;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+
+import javax.annotation.Generated;
 
 /**
  * Created by MSBurger on 09.09.2016.
  */
 public class UserDto {
     @Id
-    public final String userId;
-    public final String degree;
-    public final String salutation;
-    public final String surename;
-    public final String lastname;
-    public final String password; //it is a hashvalue!!
-    public final String email; // login
-    public final String telefon;
-    public final Date startAccess;
-    public final List<String> roles;
-    public final boolean active;
+    public String userId;
+    public String degree;
+    public String salutation;
+    public String surename;
+    public String lastname;
+    public String password; //it is a hashvalue!!
+    public String email; // login
+    public String telefon;
+    public Date startAccess;
+    public List<String> roles;
+    public boolean active;
+
+    public UserDto(){
+    }
 
     public UserDto(String userId,
                    String degree,
@@ -88,6 +94,50 @@ public class UserDto {
 
     public boolean isActive() {
         return active;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+    public void setSalutation(String salutation) {
+        this.salutation = salutation;
+    }
+
+    public void setSurename(String surename) {
+        this.surename = surename;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setTelefon(String telefon) {
+        this.telefon = telefon;
+    }
+
+    public void setStartAccess(Date startAccess) {
+        this.startAccess = startAccess;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

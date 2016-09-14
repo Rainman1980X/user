@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,13 @@ import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserActions;
 import s3f.ka_user_store.interfaces.UserRepository;
 
+import java.util.Map;
+
 /**
  * Created by MSBurger on 12.09.2016.
  */
 @Service
-public class DeactivateUserAction implements UserActions {
+public class DeactivateUserAction implements UserActions<Map<String,String>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateUserAction.class);
 
@@ -32,30 +35,23 @@ public class DeactivateUserAction implements UserActions {
     private MongoTemplate mongoTemplate;
 
     @Override
-    @RequestMapping(value = "/api/v1/ka-user-store/activateUser", method = RequestMethod.PUT)
     public ResponseEntity<HttpStatus> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
-                                                     @RequestHeader(value = "Authorization") String authorization,
-                                                     @RequestHeader(value = "CorrelationToken") String correlationToken,
-                                                     @RequestBody UserDto userDto) {
-        LOGGER.info("Activation of the user was successfully");
-        LOGGER.info(userDto.toString());
+                                                     String authorization,
+                                                     String correlationToken,
+                                                     Map<String,String> httpValues) {
+        LOGGER.info("Deactivation of the user");
 
         try {
-            UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(userDto.getUserId())
-                    .andOperator(Criteria.where("email").is(userDto.getEmail()))), UserDto.class);
-
+            UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
             if (userDtoTemp == null) {
                 LOGGER.info("User not found");
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             LOGGER.info(userDtoTemp.toString());
-            if (userDto.isActive() == userDtoTemp.isActive() && userDto.isActive()) {
-                LOGGER.info("User is deactivated was not changed");
-                return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
-            }
+            mongoTemplate.updateFirst(
+                    new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
+                    Update.update("active", false), UserDto.class);
             LOGGER.info(userDtoTemp.toString());
-            mongoTemplate.save(userDto);
-            LOGGER.info(userDto.toString());
             LOGGER.info("Deactivation of the user was successfully");
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
