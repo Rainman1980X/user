@@ -39,7 +39,7 @@ public class UserControllerTest {
     private UserRepository userRepository;
     private final String authorization = "Authorization";
     private final String correlationToken = "CorrelationToken";
-    private final List<String> roles = Arrays.asList(new String[]{"Admin","contact"});
+    private final List<String> roles = Arrays.asList(new String[]{"Admin", "contact"});
     private final UserDto userDto = new UserDto(
             "a1",
             "",
@@ -58,32 +58,53 @@ public class UserControllerTest {
         userRepository = mock(UserRepository.class);
         ReflectionTestUtils.setField(userController, "userRepository", userRepository);
     }
+
     @Test
     public void createLogin() throws Exception {
-        ResponseEntity<UserDto> return0 = userController.create(authorization,authorization,userDto);
+        ResponseEntity<UserDto> return0 = userController.create(authorization, authorization, userDto);
         assertTrue(return0.getStatusCodeValue() == HttpStatus.OK.value());
     }
+
     @Test
-    public void checkDoubleLogin(){
+    public void checkDoubleLogin() {
         fail("Create Test here, embedded mongodb ");
     }
 
     @Test
-    public void newPassword(){
+    public void changePassword() {
         fail("Create method");
     }
 
     @Test
-    public void setRole(){
+    public void changeRoles() {
         fail("Create method. Change the tests of the defined behaviours, User roles are not finally defined.");
     }
 
     @Test
-    public void activeUser(){
+    public void changeUserStatusTrue() {
         fail("Create method");
     }
+
     @Test
-    public void deactiveUser(){
+    public void changeUserStatusFalse() {
         fail("Create method");
     }
+
+    @Test
+    public void changeUserValuesEmail() {
+        fail("Create method");
+    }
+
+    @Test
+    public void getUser() {fail("Create method"); }
+
+    @Test
+    public void getUserList() {fail("Create method"); }
+
+    @Test
+    public void getRolesListOfUser() {fail("Create method"); }
+
+    @Test
+    public void getUserStatus() {fail("Create method"); }
+
 }

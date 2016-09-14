@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
-import s3f.ka_user_store.services.*;
+import s3f.ka_user_store.services.User.*;
 
 import java.util.HashMap;
 import java.util.List;

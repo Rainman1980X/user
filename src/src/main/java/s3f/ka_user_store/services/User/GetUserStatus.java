@@ -1,4 +1,4 @@
-package s3f.ka_user_store.services;
+package s3f.ka_user_store.services.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +9,6 @@ import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserActions;
 import s3f.ka_user_store.interfaces.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
