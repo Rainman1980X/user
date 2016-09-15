@@ -25,13 +25,16 @@ public class GetRoleListOfUser implements UserActions<Map<String,String>> {
                                                        Map<String,String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if(userDtoTemp == null){
+            LOGGER.info("User not found");
             return new ResponseEntity<List<String>>(new ArrayList<String>(), HttpStatus.NOT_FOUND);
         }
         if(userDtoTemp.getRoles().isEmpty()){
+            LOGGER.info("Role list is empty.");
             return new ResponseEntity<List<String>>(new ArrayList<String>(), HttpStatus.NOT_FOUND);
         }
         List<String> roleList = new ArrayList<String>();
         roleList.addAll(userDtoTemp.getRoles());
+        LOGGER.info("List of roles created.");
         return new ResponseEntity<List<String>>(roleList,HttpStatus.OK);
     }
 }

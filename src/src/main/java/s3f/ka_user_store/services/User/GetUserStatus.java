@@ -25,8 +25,10 @@ public class GetUserStatus implements UserActions<Map<String,String>> {
                                                        Map<String, String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if (userDtoTemp == null) {
+            LOGGER.info("User not found");
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND);
         }
+        LOGGER.info("User status.");
         return new ResponseEntity<Boolean>(userDtoTemp.isActive(), HttpStatus.OK);
     }
 }

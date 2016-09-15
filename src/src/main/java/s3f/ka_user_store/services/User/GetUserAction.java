@@ -25,6 +25,7 @@ public class GetUserAction implements UserActions<Map<String,String>> {
                                                   Map<String,String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if (userDtoTemp == null) {
+            LOGGER.info("User not found");
             return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<UserDto>(userDtoTemp, HttpStatus.OK);

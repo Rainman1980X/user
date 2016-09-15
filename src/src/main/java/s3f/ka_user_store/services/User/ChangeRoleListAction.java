@@ -37,7 +37,7 @@ public class ChangeRoleListAction implements UserActions<Map<String,String>> {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
             if (userDtoTemp == null) {
                 LOGGER.info("User not found");
-                return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             userDtoTemp.getRoles().forEach(item->LOGGER.info(item));
             List<String> roleList = Stream.of(httpValues.get("roles").split(",")).collect(Collectors.toList());

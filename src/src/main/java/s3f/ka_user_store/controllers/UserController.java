@@ -1,5 +1,8 @@
 package s3f.ka_user_store.controllers;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
 import s3f.ka_user_store.services.User.*;
+import sun.net.www.protocol.http.HttpURLConnection;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +32,12 @@ public class UserController {
     private MongoTemplate mongoTemplate;
 
     @RequestMapping(value = "/api/v1/user-store/user", method = RequestMethod.PUT)
+    @ApiOperation(value = "Create a new user.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User successful created", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_CONFLICT, message = "User is duplicate.", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "User can't be saved.", response = UserDto.class)
+    })
     public ResponseEntity<UserDto> create(@RequestHeader(value = "Authorization") String authorization,
                                              @RequestHeader(value = "CorrelationToken") String correlationToken,
                                              @RequestBody UserDto userDto) {
@@ -35,6 +45,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/user/{", method = RequestMethod.POST)
+    @ApiOperation(value = "Edit an user.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User successful stored", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found.", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "User unsuccessful stored", response = HttpStatus.class)
+    })
     public ResponseEntity<HttpStatus> edit(@RequestHeader(value = "Authorization") String authorization,
                                            @RequestHeader(value = "CorrelationToken") String correlationToken,
                                            @RequestBody UserDto userDto) {
@@ -42,6 +58,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/password/{userId}/{password}", method = RequestMethod.POST)
+    @ApiOperation(value = "Change password of an user..", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Password of the user successful changed", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "Password was not changed", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Password change fails.", response = HttpStatus.class)
+    })
     public ResponseEntity<HttpStatus> changePassword(@RequestHeader(value = "Authorization") String authorization,
                                                      @RequestHeader(value = "CorrelationToken") String correlationToken,
                                                      @PathVariable("userId") String userId,
@@ -53,6 +76,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/role/{userId}/{roles}", method = RequestMethod.POST)
+    @ApiOperation(value = "Change role of user.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Role list of the user successful changed", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found.", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Role list change fails.", response = HttpStatus.class)
+    })
     public ResponseEntity<HttpStatus> changeRole(@RequestHeader(value = "Authorization") String authorization,
                                                  @RequestHeader(value = "CorrelationToken") String correlationToken,
                                                  @PathVariable("userId") String userId,
@@ -64,6 +93,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/status/{userId}/{status}", method = RequestMethod.POST)
+    @ApiOperation(value = "Change status of user.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Activation / Deactivation of the user was successfullyd", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "User is activated or deactivated. ", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Activation / Deactivation of the user has failed.", response = HttpStatus.class)
+    })
     public ResponseEntity<HttpStatus> changeStatus(@RequestHeader(value = "Authorization") String authorization,
                                                    @RequestHeader(value = "CorrelationToken") String correlationToken,
                                                    @PathVariable("userId") String userId,
@@ -82,6 +118,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/user/{userId}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get user by userID.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class)
+    })
     public ResponseEntity<UserDto> getUser(@RequestHeader(value = "Authorization") String authorization,
                                            @RequestHeader(value = "CorrelationToken") String correlationToken,
                                            @PathVariable("userId") String userId) {
@@ -91,6 +132,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/user/list", method = RequestMethod.GET)
+    @ApiOperation(value = "Get user by userID.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Users found", response = List.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Users not found", response = List.class)
+    })
     public ResponseEntity<List<UserDto>> getUserList(@RequestHeader(value = "Authorization") String authorization,
                                                      @RequestHeader(value = "CorrelationToken") String correlationToken) {
         Map<String,String> httpsValues = new HashMap<>();
@@ -98,6 +144,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/{userId}/roles", method = RequestMethod.GET)
+    @ApiOperation(value = "Get list of roles from user.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "List of roles created.", response = List.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found.", response = List.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Role list is empty", response = List.class)
+    })
     public ResponseEntity<List<String>> getRoleListOfUser(@RequestHeader(value = "Authorization") String authorization,
                                                           @RequestHeader(value = "CorrelationToken") String correlationToken,
                                                           @PathVariable("userId") String userId) {
@@ -106,6 +158,11 @@ public class UserController {
         return (new GetRoleListOfUser()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken, httpsValues);
     }
     @RequestMapping(value = "/api/v1/user-store/{userId}/status", method = RequestMethod.GET)
+    @ApiOperation(value = "Get user status by userID.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Got user status ", response = Boolean.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Users not found", response = Boolean.class)
+    })
     public ResponseEntity<Boolean> getUserStatus(@RequestHeader(value = "Authorization") String authorization,
                                                           @RequestHeader(value = "CorrelationToken") String correlationToken,
                                                           @PathVariable("userId") String userId) {

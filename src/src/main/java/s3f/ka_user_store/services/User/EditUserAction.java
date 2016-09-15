@@ -45,9 +45,10 @@ public class EditUserAction implements UserActions<UserDto> {
             LOGGER.info(userDtoTemp.toString());
             mongoTemplate.save(userDto);
             LOGGER.info(userDto.toString());
+            LOGGER.error("User successful stored.");
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("User successful stored", e);
+            LOGGER.error("User unsuccessful stored", e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
