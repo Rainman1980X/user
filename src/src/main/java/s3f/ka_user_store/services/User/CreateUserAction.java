@@ -36,7 +36,7 @@ public class CreateUserAction implements UserActions<UserDto> {
         }
 
         try {
-
+            userDto.setUserId(UUID.randomUUID().toString());
             UserDto newUserDto = this.userRepository.save(userDto);
             LoggerHelper.logData(Level.INFO,"User successful created",correlationToken,authorization, UserRepository.class.getName());
             return new ResponseEntity<UserDto>(newUserDto,HttpStatus.OK);
