@@ -3,8 +3,6 @@ package s3f.ka_user_store.controllers;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
@@ -13,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
-import s3f.ka_user_store.interfaces.UserRepository;
-import s3f.ka_user_store.services.User.CreateUserAction;
-import s3f.ka_user_store.services.User.EditUserAction;
-import s3f.ka_user_store.services.company.CreateCompanyAction;
-import s3f.ka_user_store.services.company.EditCompanyAction;
+import s3f.ka_user_store.actions.company.CreateCompanyAction;
+import s3f.ka_user_store.actions.company.EditCompanyAction;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 /**
