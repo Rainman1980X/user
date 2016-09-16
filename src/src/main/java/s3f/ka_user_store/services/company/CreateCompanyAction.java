@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import s3f.ka_user_store.dtos.CompanyDto;
-import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.CompanyActions;
 import s3f.ka_user_store.interfaces.CompanyRepository;
 import s3f.ka_user_store.logging.LoggerHelper;
@@ -21,16 +20,16 @@ public class CreateCompanyAction implements CompanyActions<CompanyDto> {
     private CompanyRepository companyRepository;
 
     @Override
-    public ResponseEntity<?> doActionOnCompany(CompanyRepository companyRepository,
+    public ResponseEntity<CompanyDto> doActionOnCompany(CompanyRepository companyRepository,
                                                MongoTemplate mongoTemplate,
                                                String authorization,
                                                String correlationToken,
                                                CompanyDto companyDto) {
         this.companyRepository = companyRepository;
-        LoggerHelper.logData(Level.INFO,"Create User",correlationToken,authorization, CreateUserAction.class.getName());
+        LoggerHelper.logData(Level.INFO,"Create company",correlationToken,authorization, CreateUserAction.class.getName());
         if (hasDoubleEntry(companyDto.getCustomerNumber())) {
-            LoggerHelper.logData(Level.INFO,"User is duplicate.",correlationToken,authorization, CreateUserAction.class.getName());
-            return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.CONFLICT);
+            LoggerHelper.logData(Level.INFO,"Company is duplicate.",correlationToken,authorization, CreateUserAction.class.getName());
+            return new ResponseEntity<CompanyDto>(new CompanyDto(), HttpStatus.CONFLICT);
         }
 
         try {

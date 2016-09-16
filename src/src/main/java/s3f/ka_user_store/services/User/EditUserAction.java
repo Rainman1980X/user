@@ -36,7 +36,7 @@ public class EditUserAction implements UserActions<UserDto> {
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(userDto.getUserId())
                     .andOperator(Criteria.where("email").is(userDto.getEmail()))), UserDto.class);
-            if (userDto == null) {
+            if (userDtoTemp == null) {
                 LoggerHelper.logData(Level.INFO,"User not found.",correlationToken,authorization, EditUserAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }

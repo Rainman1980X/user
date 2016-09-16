@@ -44,7 +44,7 @@ public class UserController {
         return (new CreateUserAction()).doActionOnUser(userRepository, null, authorization, correlationToken, userDto);
     }
 
-    @RequestMapping(value = "/api/v1/user-store/user/{", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/v1/user-store/user/{userId}", method = RequestMethod.POST)
     @ApiOperation(value = "Edit an user.", produces = "application/json",consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User successful stored", response = HttpStatus.class),
