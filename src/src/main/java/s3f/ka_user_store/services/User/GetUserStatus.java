@@ -27,10 +27,10 @@ public class GetUserStatus implements UserActions<Map<String,String>> {
                                                        Map<String, String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if (userDtoTemp == null) {
-            LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
+            LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, GetUserStatus.class.getName());
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND);
         }
-        LoggerHelper.logData(Level.INFO,"User status found.",correlationToken,authorization, UserRepository.class.getName());
+        LoggerHelper.logData(Level.INFO,"User status found.",correlationToken,authorization, GetUserStatus.class.getName());
         return new ResponseEntity<Boolean>(userDtoTemp.isActive(), HttpStatus.OK);
     }
 }

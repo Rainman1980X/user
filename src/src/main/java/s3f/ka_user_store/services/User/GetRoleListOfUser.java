@@ -26,16 +26,16 @@ public class GetRoleListOfUser implements UserActions<Map<String,String>> {
                                                        Map<String,String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if(userDtoTemp == null){
-            LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
+            LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, GetRoleListOfUser.class.getName());
             return new ResponseEntity<List<String>>(new ArrayList<String>(), HttpStatus.NOT_FOUND);
         }
         if(userDtoTemp.getRoles().isEmpty()){
-            LoggerHelper.logData(Level.INFO,"Role list is empty.",correlationToken,authorization, UserRepository.class.getName());
+            LoggerHelper.logData(Level.INFO,"Role list is empty.",correlationToken,authorization, GetRoleListOfUser.class.getName());
             return new ResponseEntity<List<String>>(new ArrayList<String>(), HttpStatus.NOT_FOUND);
         }
         List<String> roleList = new ArrayList<String>();
         roleList.addAll(userDtoTemp.getRoles());
-        LoggerHelper.logData(Level.INFO,"List of roles created.",correlationToken,authorization, UserRepository.class.getName());
+        LoggerHelper.logData(Level.INFO,"List of roles created.",correlationToken,authorization, GetRoleListOfUser.class.getName());
         return new ResponseEntity<List<String>>(roleList,HttpStatus.OK);
     }
 }

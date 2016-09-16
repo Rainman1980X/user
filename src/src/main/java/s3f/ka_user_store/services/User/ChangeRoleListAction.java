@@ -30,22 +30,22 @@ public class ChangeRoleListAction implements UserActions<Map<String,String>> {
                                                      String authorization,
                                                      String correlationToken,
                                                      Map<String,String> httpValues) {
-        LoggerHelper.logData(Level.INFO,"Change Role list of user",correlationToken,authorization, UserRepository.class.getName());
+        LoggerHelper.logData(Level.INFO,"Change Role list of user",correlationToken,authorization, ChangeRoleListAction.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
             if (userDtoTemp == null) {
-                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
+                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, ChangeRoleListAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
-            userDtoTemp.getRoles().forEach(item->LoggerHelper.logData(Level.INFO,item,correlationToken,authorization, UserRepository.class.getName()));
+            userDtoTemp.getRoles().forEach(item->LoggerHelper.logData(Level.INFO,item,correlationToken,authorization, ChangeRoleListAction.class.getName()));
             List<String> roleList = Stream.of(httpValues.get("roles").split(",")).collect(Collectors.toList());
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
                     Update.update("roles", roleList), UserDto.class);
-            LoggerHelper.logData(Level.INFO,"Role list of the user successful changed",correlationToken,authorization, UserRepository.class.getName());
+            LoggerHelper.logData(Level.INFO,"Role list of the user successful changed",correlationToken,authorization, ChangeRoleListAction.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LoggerHelper.logData(Level.ERROR,"Role list change fails.",correlationToken,authorization, UserRepository.class.getName(),e);
+            LoggerHelper.logData(Level.ERROR,"Role list change fails.",correlationToken,authorization, ChangeRoleListAction.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

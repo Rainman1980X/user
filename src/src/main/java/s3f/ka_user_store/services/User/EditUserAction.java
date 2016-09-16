@@ -32,19 +32,19 @@ public class EditUserAction implements UserActions<UserDto> {
                                                      String authorization,
                                                      String correlationToken,
                                                      UserDto userDto) {
-        LoggerHelper.logData(Level.INFO,"Edit User",correlationToken,authorization, UserRepository.class.getName());
+        LoggerHelper.logData(Level.INFO,"Edit User",correlationToken,authorization, EditUserAction.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(userDto.getUserId())
                     .andOperator(Criteria.where("email").is(userDto.getEmail()))), UserDto.class);
             if (userDto == null) {
-                LoggerHelper.logData(Level.INFO,"User not found.",correlationToken,authorization, UserRepository.class.getName());
+                LoggerHelper.logData(Level.INFO,"User not found.",correlationToken,authorization, EditUserAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             mongoTemplate.save(userDto);
-            LoggerHelper.logData(Level.INFO,"User successful stored.",correlationToken,authorization, UserRepository.class.getName());
+            LoggerHelper.logData(Level.INFO,"User successful stored.",correlationToken,authorization, EditUserAction.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LoggerHelper.logData(Level.ERROR,"User unsuccessful stored",correlationToken,authorization, UserRepository.class.getName(),e);
+            LoggerHelper.logData(Level.ERROR,"User unsuccessful stored",correlationToken,authorization, EditUserAction.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

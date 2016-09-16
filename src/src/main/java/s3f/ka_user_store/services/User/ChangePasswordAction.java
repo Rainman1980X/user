@@ -36,26 +36,26 @@ public class ChangePasswordAction implements UserActions<Map<String, String>> {
                                                      String authorization,
                                                      String correlationToken,
                                                      Map<String, String> httpValues) {
-        LoggerHelper.logData(Level.INFO,"Set a new password for the User",correlationToken,authorization, UserRepository.class.getName());
+        LoggerHelper.logData(Level.INFO,"Set a new password for the User",correlationToken,authorization, ChangePasswordAction.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
 
             if (userDtoTemp == null) {
-                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
+                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, ChangePasswordAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             if ((httpValues.get("password")).equals(userDtoTemp.getPassword())) {
-                LoggerHelper.logData(Level.INFO,"Password was not changed",correlationToken,authorization, UserRepository.class.getName());
+                LoggerHelper.logData(Level.INFO,"Password was not changed",correlationToken,authorization, ChangePasswordAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
             }
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
                     Update.update("password", httpValues.get("password")), UserDto.class);
-            LoggerHelper.logData(Level.INFO,"Password of the user successful changed",correlationToken,authorization, UserRepository.class.getName());
+            LoggerHelper.logData(Level.INFO,"Password of the user successful changed",correlationToken,authorization, ChangePasswordAction.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 
         } catch (Exception e) {
-            LoggerHelper.logData(Level.INFO,"Password change fails.",correlationToken,authorization, UserRepository.class.getName(),e);
+            LoggerHelper.logData(Level.INFO,"Password change fails.",correlationToken,authorization, ChangePasswordAction.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
