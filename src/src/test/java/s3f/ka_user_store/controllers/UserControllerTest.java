@@ -79,6 +79,10 @@ public class UserControllerTest {
     public void changeRoles() {
         fail("Create method. Change the tests of the defined behaviours, User roles are not finally defined.");
     }
+    @Test
+    public void changeEmptyRoles() {
+        fail("Create method. Change the tests of the defined behaviours, User roles are not finally defined.");
+    }
 
     @Test
     public void changeUserStatusTrue() {

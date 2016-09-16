@@ -8,12 +8,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import s3f.ka_user_store.actions.company.ChangeUserCompanyAction;
+import s3f.ka_user_store.actions.company.CreateCompanyAction;
+import s3f.ka_user_store.actions.company.EditCompanyAction;
+import s3f.ka_user_store.actions.company.GetCompanyAction;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
-import s3f.ka_user_store.actions.company.CreateCompanyAction;
-import s3f.ka_user_store.actions.company.EditCompanyAction;
 import sun.net.www.protocol.http.HttpURLConnection;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MSBurger on 09.09.2016.
@@ -27,11 +33,11 @@ public class CompanyController {
     private MongoTemplate mongoTemplate;
 
     @RequestMapping(value = "/api/v1/user-store/company", method = RequestMethod.PUT)
-    @ApiOperation(value = "Create a new company.", produces = "application/json",consumes = "application/json")
+    @ApiOperation(value = "Create a new company.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company successful created", response = UserDto.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_CONFLICT, message = "Company is duplicate.", response = UserDto.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Company can't be saved.", response = UserDto.class)
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company successful created", response = CompanyDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_CONFLICT, message = "Company is duplicate.", response = CompanyDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Company can't be saved.", response = CompanyDto.class)
     })
     public ResponseEntity<CompanyDto> create(@RequestHeader(value = "Authorization") String authorization,
                                              @RequestHeader(value = "CorrelationToken") String correlationToken,
@@ -40,7 +46,7 @@ public class CompanyController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/company/{companyId}", method = RequestMethod.POST)
-    @ApiOperation(value = "Edit an user.", produces = "application/json",consumes = "application/json")
+    @ApiOperation(value = "Edit an user.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company successful stored", response = HttpStatus.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found.", response = HttpStatus.class),
@@ -50,5 +56,37 @@ public class CompanyController {
                                            @RequestHeader(value = "CorrelationToken") String correlationToken,
                                            @RequestBody CompanyDto companyDto) {
         return (new EditCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization, correlationToken, companyDto);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/company/{companyId}/{assignedUserList}", method = RequestMethod.POST)
+    @ApiOperation(value = "Change the assigned user", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Assigned user list successful changed", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found.", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Assigned user list change fails.", response = HttpStatus.class)
+    })
+    public ResponseEntity<HttpStatus> changeAssigendUser(@RequestHeader(value = "Authorization") String authorization,
+                                                         @RequestHeader(value = "CorrelationToken") String correlationToken,
+                                                         @PathVariable("companyId") String companyId,
+                                                         @PathVariable("assignedUserList") List<String> assignedUserList) {
+        Map<String, String> httpsValues = new HashMap<>();
+        httpsValues.put("companyId", companyId);
+        httpsValues.put("assignedUserList", String.join(",", assignedUserList));
+
+        return (new ChangeUserCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization, correlationToken, httpsValues);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/company/{companyId}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get company by companyId.", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = UserDto.class)
+    })
+    public ResponseEntity<CompanyDto> getCompany(@RequestHeader(value = "Authorization") String authorization,
+                                              @RequestHeader(value = "CorrelationToken") String correlationToken,
+                                              @PathVariable("companyId") String companyId) {
+        Map<String, String> httpsValues = new HashMap<>();
+        httpsValues.put("companyId", companyId);
+        return (new GetCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization, correlationToken, httpsValues);
     }
 }
