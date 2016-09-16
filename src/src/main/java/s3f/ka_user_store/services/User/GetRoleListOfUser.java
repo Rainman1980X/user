@@ -1,5 +1,6 @@
 package s3f.ka_user_store.services.User;
 
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserActions;
 import s3f.ka_user_store.interfaces.UserRepository;
+import s3f.ka_user_store.logging.LoggerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,6 @@ import java.util.Map;
  * Created by MSBurger on 12.09.2016.
  */
 public class GetRoleListOfUser implements UserActions<Map<String,String>> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetRoleListOfUser.class);
     @Override
     public ResponseEntity<List<String>> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
                                                        String authorization,
@@ -25,16 +26,16 @@ public class GetRoleListOfUser implements UserActions<Map<String,String>> {
                                                        Map<String,String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if(userDtoTemp == null){
-            LOGGER.info("User not found");
+            LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
             return new ResponseEntity<List<String>>(new ArrayList<String>(), HttpStatus.NOT_FOUND);
         }
         if(userDtoTemp.getRoles().isEmpty()){
-            LOGGER.info("Role list is empty.");
+            LoggerHelper.logData(Level.INFO,"Role list is empty.",correlationToken,authorization, UserRepository.class.getName());
             return new ResponseEntity<List<String>>(new ArrayList<String>(), HttpStatus.NOT_FOUND);
         }
         List<String> roleList = new ArrayList<String>();
         roleList.addAll(userDtoTemp.getRoles());
-        LOGGER.info("List of roles created.");
+        LoggerHelper.logData(Level.INFO,"List of roles created.",correlationToken,authorization, UserRepository.class.getName());
         return new ResponseEntity<List<String>>(roleList,HttpStatus.OK);
     }
 }

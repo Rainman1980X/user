@@ -1,5 +1,6 @@
 package s3f.ka_user_store.services.User;
 
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserActions;
 import s3f.ka_user_store.interfaces.UserRepository;
+import s3f.ka_user_store.logging.LoggerHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -23,32 +25,27 @@ import java.util.stream.Stream;
  */
 @Service
 public class ChangeRoleListAction implements UserActions<Map<String,String>> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeRoleListAction.class);
-
     @Override
     public ResponseEntity<HttpStatus> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
                                                      String authorization,
                                                      String correlationToken,
                                                      Map<String,String> httpValues) {
-        LOGGER.info("Change Role list of user");
-        httpValues.forEach((key,value)-> LOGGER.info(key + ":" + value)); ;
+        LoggerHelper.logData(Level.INFO,"Change Role list of user",correlationToken,authorization, UserRepository.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
             if (userDtoTemp == null) {
-                LOGGER.info("User not found");
+                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
-            userDtoTemp.getRoles().forEach(item->LOGGER.info(item));
+            userDtoTemp.getRoles().forEach(item->LoggerHelper.logData(Level.INFO,item,correlationToken,authorization, UserRepository.class.getName()));
             List<String> roleList = Stream.of(httpValues.get("roles").split(",")).collect(Collectors.toList());
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
                     Update.update("roles", roleList), UserDto.class);
-
-            LOGGER.info("Role list of the user successful changed");
+            LoggerHelper.logData(Level.INFO,"Role list of the user successful changed",correlationToken,authorization, UserRepository.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Role list change fails.", e);
+            LoggerHelper.logData(Level.ERROR,"Role list change fails.",correlationToken,authorization, UserRepository.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

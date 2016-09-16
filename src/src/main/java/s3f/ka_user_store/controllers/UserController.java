@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponses;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.Map;
  * Created by MSBurger on 09.09.2016.
  */
 @RestController
+
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 

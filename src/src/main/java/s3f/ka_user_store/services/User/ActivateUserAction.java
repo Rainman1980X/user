@@ -1,7 +1,7 @@
 package s3f.ka_user_store.services.User;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -10,9 +10,11 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import s3f.Application;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserActions;
 import s3f.ka_user_store.interfaces.UserRepository;
+import s3f.ka_user_store.logging.LoggerHelper;
 
 import java.util.Map;
 
@@ -22,8 +24,6 @@ import java.util.Map;
 @Service
 public class ActivateUserAction implements UserActions<Map<String,String>> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivateUserAction.class);
-
     @Autowired
     private UserRepository userRepository;
 
@@ -32,26 +32,26 @@ public class ActivateUserAction implements UserActions<Map<String,String>> {
                                                      String authorization,
                                                      String correlationToken,
                                                      Map<String,String> httpValues) {
-        LOGGER.info("Activation of the user was successfully");
+        LoggerHelper.logData(Level.INFO,"Start activation of the user",correlationToken,authorization, UserRepository.class.getName());
+
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
             if (userDtoTemp == null) {
-                LOGGER.info("User not found");
+                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
-            LOGGER.info(userDtoTemp.toString());
+            LoggerHelper.logData(Level.INFO,userDtoTemp.toString(),correlationToken,authorization, UserRepository.class.getName());
             if (userDtoTemp.isActive() && !userDtoTemp.isActive()) {
-                LOGGER.info("User is activated");
+                LoggerHelper.logData(Level.INFO,"User is activated",correlationToken,authorization, UserRepository.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
             }
-            LOGGER.info(userDtoTemp.toString());
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
                     Update.update("active", true), UserDto.class);
-            LOGGER.info("Activation of the user was successfully");
+            LoggerHelper.logData(Level.INFO,"Activation of the user was successfully",correlationToken,authorization, UserRepository.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Activation of the user has failed.", e);
+            LoggerHelper.logData(Level.ERROR,"Activation of the user has failed.",correlationToken,authorization, UserRepository.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -3,6 +3,7 @@ package s3f.ka_user_store.dtos;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.domain.Persistable;
 
 import org.springframework.data.annotation.Id;
 

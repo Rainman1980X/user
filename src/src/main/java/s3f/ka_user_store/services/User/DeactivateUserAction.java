@@ -1,5 +1,6 @@
 package s3f.ka_user_store.services.User;
 
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserActions;
 import s3f.ka_user_store.interfaces.UserRepository;
+import s3f.ka_user_store.logging.LoggerHelper;
 
 import java.util.Map;
 
@@ -21,9 +23,6 @@ import java.util.Map;
  */
 @Service
 public class DeactivateUserAction implements UserActions<Map<String,String>> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeactivateUserAction.class);
-
     @Autowired
     private UserRepository userRepository;
 
@@ -35,23 +34,20 @@ public class DeactivateUserAction implements UserActions<Map<String,String>> {
                                                      String authorization,
                                                      String correlationToken,
                                                      Map<String,String> httpValues) {
-        LOGGER.info("Deactivation of the user");
-
+        LoggerHelper.logData(Level.INFO,"Deactivation of the user",correlationToken,authorization, UserRepository.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
             if (userDtoTemp == null) {
-                LOGGER.info("User not found");
+                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, UserRepository.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
-            LOGGER.info(userDtoTemp.toString());
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
                     Update.update("active", false), UserDto.class);
-            LOGGER.info(userDtoTemp.toString());
-            LOGGER.info("Deactivation of the user was successfully");
+            LoggerHelper.logData(Level.INFO,"Deactivation of the user was successfully",correlationToken,authorization, UserRepository.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Deactivation of the user has failed.", e);
+            LoggerHelper.logData(Level.ERROR,"Deactivation of the user has failed.",correlationToken,authorization, UserRepository.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

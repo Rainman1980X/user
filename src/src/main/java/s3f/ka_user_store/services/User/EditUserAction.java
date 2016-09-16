@@ -1,5 +1,6 @@
 package s3f.ka_user_store.services.User;
 
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,13 @@ import org.springframework.stereotype.Service;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserActions;
 import s3f.ka_user_store.interfaces.UserRepository;
+import s3f.ka_user_store.logging.LoggerHelper;
 
 /**
  * Created by MSBurger on 12.09.2016.
  */
 @Service
 public class EditUserAction implements UserActions<UserDto> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EditUserAction.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -32,23 +32,19 @@ public class EditUserAction implements UserActions<UserDto> {
                                                      String authorization,
                                                      String correlationToken,
                                                      UserDto userDto) {
-        LOGGER.info("Edit User");
-        LOGGER.info(userDto.toString());
-
+        LoggerHelper.logData(Level.INFO,"Edit User",correlationToken,authorization, UserRepository.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(userDto.getUserId())
                     .andOperator(Criteria.where("email").is(userDto.getEmail()))), UserDto.class);
             if (userDto == null) {
-                LOGGER.error("User not found.");
+                LoggerHelper.logData(Level.INFO,"User not found.",correlationToken,authorization, UserRepository.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
-            LOGGER.info(userDtoTemp.toString());
             mongoTemplate.save(userDto);
-            LOGGER.info(userDto.toString());
-            LOGGER.error("User successful stored.");
+            LoggerHelper.logData(Level.INFO,"User successful stored.",correlationToken,authorization, UserRepository.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("User unsuccessful stored", e);
+            LoggerHelper.logData(Level.ERROR,"User unsuccessful stored",correlationToken,authorization, UserRepository.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
