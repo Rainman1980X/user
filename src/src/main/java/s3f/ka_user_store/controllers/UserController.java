@@ -26,8 +26,6 @@ import java.util.Map;
 @RestController
 
 public class UserController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
     private UserRepository userRepository;
     @Autowired

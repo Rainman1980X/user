@@ -2,6 +2,8 @@ package s3f.ka_user_store.dtos;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 /**
  * Created by MSBurger on 09.09.2016.
  */
@@ -12,19 +14,28 @@ public class CompanyDto {
     public String street;
     public String zipcode;
     public String locality;
-    public String customernumber;
+    public String customerNumber;
     public String vatId; //Umsatzsteuer-Identifikationsnummer
+    public List<String> assignedUserId;
 
     public CompanyDto(){}
 
-    public CompanyDto(String companyId, String name, String street, String zipcode, String locality, String customernumber, String vatId) {
+    public CompanyDto(String companyId,
+                      String name,
+                      String street,
+                      String zipcode,
+                      String locality,
+                      String customerNumber,
+                      String vatId,
+                      List<String> assignedUserId) {
         this.companyId = companyId;
         this.name = name;
         this.street = street;
         this.zipcode = zipcode;
         this.locality = locality;
-        this.customernumber = customernumber;
+        this.customerNumber = customerNumber;
         this.vatId = vatId;
+        this.assignedUserId.addAll(assignedUserId) ; // create a local copy
     }
 
     public String getCompanyId() {
@@ -47,12 +58,48 @@ public class CompanyDto {
         return locality;
     }
 
-    public String getCustomernumber() {
-        return customernumber;
+    public String getCustomerNumber() {
+        return customerNumber;
     }
 
     public String getVatId() {
         return vatId;
+    }
+
+    public List<String> getAssignedUserId() {
+        return assignedUserId; // While returning create a new List !!
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
+
+    public void setCustomerNumber(String customerNumber) {
+        this.customerNumber = customerNumber;
+    }
+
+    public void setVatId(String vatId) {
+        this.vatId = vatId;
+    }
+
+    public void setAssignedUserId(List<String> assignedUserId) {
+        this.assignedUserId.addAll(assignedUserId);
     }
 
     @Override
@@ -67,7 +114,7 @@ public class CompanyDto {
         if (street != null ? !street.equals(that.street) : that.street != null) return false;
         if (zipcode != null ? !zipcode.equals(that.zipcode) : that.zipcode != null) return false;
         if (locality != null ? !locality.equals(that.locality) : that.locality != null) return false;
-        if (customernumber != null ? !customernumber.equals(that.customernumber) : that.customernumber != null)
+        if (customerNumber != null ? !customerNumber.equals(that.customerNumber) : that.customerNumber != null)
             return false;
         return vatId != null ? vatId.equals(that.vatId) : that.vatId == null;
 
@@ -80,8 +127,9 @@ public class CompanyDto {
         result = 31 * result + (street != null ? street.hashCode() : 0);
         result = 31 * result + (zipcode != null ? zipcode.hashCode() : 0);
         result = 31 * result + (locality != null ? locality.hashCode() : 0);
-        result = 31 * result + (customernumber != null ? customernumber.hashCode() : 0);
+        result = 31 * result + (customerNumber != null ? customerNumber.hashCode() : 0);
         result = 31 * result + (vatId != null ? vatId.hashCode() : 0);
+        result = 31 * result + (assignedUserId != null ? assignedUserId.hashCode() : 0);
         return result;
     }
 
@@ -93,8 +141,9 @@ public class CompanyDto {
                 ", street='" + street + '\'' +
                 ", zipcode='" + zipcode + '\'' +
                 ", locality='" + locality + '\'' +
-                ", customernumber='" + customernumber + '\'' +
+                ", customernumber='" + customerNumber + '\'' +
                 ", vatId='" + vatId + '\'' +
+                ", assignedUserId='" + String.join(",",assignedUserId) + '\'' +
                 '}';
     }
 }
