@@ -37,6 +37,7 @@ public class EditUserAction implements UserActions<UserDto> {
                 LoggerHelper.logData(Level.INFO,"User not found.",correlationToken,authorization, EditUserAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
+            //ToDo: Prüfung ob Unterliste Role leer ist!!
             mongoTemplate.save(userDto);
             LoggerHelper.logData(Level.INFO,"User successful stored.",correlationToken,authorization, EditUserAction.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);

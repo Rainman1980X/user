@@ -39,6 +39,7 @@ public class ChangeUserCompanyAction implements CompanyActions<Map<String, Strin
             }
             companyDtoTemp.getAssignedUserId().forEach(item -> LoggerHelper.logData(Level.INFO, item, correlationToken, authorization, ChangeUserCompanyAction.class.getName()));
             List<String> assignedUserIdList = Stream.of(httpValues.get("assignedUserList").split(",")).collect(Collectors.toList());
+            //ToDo: Prüfung ob Unterliste User leer ist!!
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(companyDtoTemp.getCompanyId())),
                     Update.update("assignedUserId", assignedUserIdList), CompanyDto.class);

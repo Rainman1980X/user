@@ -35,6 +35,7 @@ public class ChangeRoleListAction implements UserActions<Map<String,String>> {
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             userDtoTemp.getRoles().forEach(item->LoggerHelper.logData(Level.INFO,item,correlationToken,authorization, ChangeRoleListAction.class.getName()));
+            //ToDo: Prüfung ob Unterliste Role leer ist!!
             List<String> roleList = Stream.of(httpValues.get("roles").split(",")).collect(Collectors.toList());
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
