@@ -12,8 +12,8 @@ import s3f.framework.lifecycle.LifecycleUrlDictionary;
 
 @SpringBootApplication
 public class Application {
-    public static Logger LOGGER_DEFAULT;
-    public static Logger LOGGER_DEBUG;
+    public static final Logger LOGGER_DEFAULT = Logger.getLogger("default");
+    public static final Logger LOGGER_DEBUG = Logger.getLogger("debug");
     private static String[] args;
     public static final String version = "v1";
     public static String lifecycle;
@@ -30,8 +30,6 @@ public class Application {
         new LifecycleUrlDictionary().check(args);
         Application.lifecycle = new LifecycleUrlDictionary().getKey(args);
         SpringApplication.run(Application.class, args);
-        LOGGER_DEFAULT = Logger.getLogger("default");
-        LOGGER_DEBUG = Logger.getLogger("debug");
         LOGGER_DEFAULT.setLevel(Level.INFO);
         LOGGER_DEBUG.setLevel(Level.DEBUG);
     }
