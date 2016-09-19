@@ -8,10 +8,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import s3f.ka_user_store.actions.company.ChangeUserCompanyAction;
-import s3f.ka_user_store.actions.company.CreateCompanyAction;
-import s3f.ka_user_store.actions.company.EditCompanyAction;
-import s3f.ka_user_store.actions.company.GetCompanyAction;
+import s3f.ka_user_store.actions.User.GetAllUserAction;
+import s3f.ka_user_store.actions.company.*;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
@@ -88,5 +86,18 @@ public class CompanyController {
         Map<String, String> httpsValues = new HashMap<>();
         httpsValues.put("companyId", companyId);
         return (new GetCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization, correlationToken, httpsValues);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/company/{companyId}/user", method = RequestMethod.GET)
+    @ApiOperation(value = "Get company by companyId.", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "User list is empty.", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = UserDto.class)
+    })
+    public ResponseEntity<List<String>> getAssigendUser(@RequestHeader(value = "Authorization") String authorization,
+                                              @RequestHeader(value = "CorrelationToken") String correlationToken,
+                                              @PathVariable("companyId") String companyId) {
+        return (new GetUserList()).doActionOnCompany(companyRepository, mongoTemplate, authorization, correlationToken, companyId);
     }
 }

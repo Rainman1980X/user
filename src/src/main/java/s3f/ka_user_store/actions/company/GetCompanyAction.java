@@ -20,8 +20,6 @@ import java.util.Map;
  */
 public class GetCompanyAction implements CompanyActions<Map<String,String>> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetCompanyAction.class);
-
     @Override
     public ResponseEntity<CompanyDto> doActionOnCompany(CompanyRepository companyRepository, MongoTemplate mongoTemplate,
                                                      String authorization,
@@ -33,6 +31,5 @@ public class GetCompanyAction implements CompanyActions<Map<String,String>> {
             return new ResponseEntity<CompanyDto>(new CompanyDto(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<CompanyDto>(companyDtoTemp, HttpStatus.OK);
-
     }
 }
