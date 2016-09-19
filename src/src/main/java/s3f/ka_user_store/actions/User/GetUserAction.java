@@ -17,8 +17,6 @@ import java.util.Map;
  */
 public class GetUserAction implements UserActions<Map<String,String>> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetUserAction.class);
-
     @Override
     public ResponseEntity<UserDto> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
                                                   String authorization,

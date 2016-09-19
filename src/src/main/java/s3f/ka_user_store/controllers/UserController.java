@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import s3f.ka_user_store.actions.User.*;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
-import s3f.ka_user_store.actions.User.*;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 import java.util.HashMap;
@@ -166,5 +166,15 @@ public class UserController {
         Map<String,String> httpsValues = new HashMap<>();
         httpsValues.put("userId",userId);
         return (new GetUserStatus()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken, httpsValues);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/roles", method = RequestMethod.GET)
+    @ApiOperation(value = "Get role list.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Get role list. ", response = Boolean.class)
+    })
+    public ResponseEntity<List<String>> getRoleList(@RequestHeader(value = "Authorization") String authorization,
+                                                 @RequestHeader(value = "CorrelationToken") String correlationToken) {
+        return (new GetRoleList()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken, new Object());
     }
 }
