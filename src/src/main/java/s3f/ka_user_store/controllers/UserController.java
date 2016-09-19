@@ -129,7 +129,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/v1/user-store/user/list", method = RequestMethod.GET)
-    @ApiOperation(value = "Get user by userID.", produces = "application/json",consumes = "application/json")
+    @ApiOperation(value = "Get user list.", produces = "application/json",consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Users found", response = List.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Users not found", response = List.class)

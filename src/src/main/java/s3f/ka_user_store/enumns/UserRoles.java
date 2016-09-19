@@ -1,6 +1,7 @@
 package s3f.ka_user_store.enumns;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,6 @@ public enum UserRoles {
     }
 
     public static List<String> getUserRoleList(){
-        return  (List<String>) userRoleList.keySet();
+        return new ArrayList<String>(userRoleList.keySet());
     }
 }
