@@ -1,8 +1,6 @@
-package s3f.ka_user_store.actions.User;
+package s3f.ka_user_store.actions.user;
 
 import org.apache.log4j.Level;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,7 @@ public class GetUserAction implements UserActions<Map<String,String>> {
                                                   Map<String,String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if (userDtoTemp == null) {
-            LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, GetUserAction.class.getName());
+            LoggerHelper.logData(Level.INFO,"user not found",correlationToken,authorization, GetUserAction.class.getName());
             return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<UserDto>(userDtoTemp, HttpStatus.OK);

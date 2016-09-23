@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
 import s3f.ka_user_store.logging.LoggerHelper;
-import s3f.ka_user_store.actions.User.CreateUserAction;
+import s3f.ka_user_store.actions.user.CreateUserAction;
 
 import java.util.UUID;
 

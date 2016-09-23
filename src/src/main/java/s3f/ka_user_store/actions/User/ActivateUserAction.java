@@ -1,4 +1,4 @@
-package s3f.ka_user_store.actions.User;
+package s3f.ka_user_store.actions.user;
 
 import org.apache.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +34,12 @@ public class ActivateUserAction implements UserActions<Map<String,String>> {
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
             if (userDtoTemp == null) {
-                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, ActivateUserAction.class.getName());
+                LoggerHelper.logData(Level.INFO,"user not found",correlationToken,authorization, ActivateUserAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             LoggerHelper.logData(Level.INFO,userDtoTemp.toString(),correlationToken,authorization, ActivateUserAction.class.getName());
             if (userDtoTemp.isActive() && !userDtoTemp.isActive()) {
-                LoggerHelper.logData(Level.INFO,"User is activated",correlationToken,authorization, ActivateUserAction.class.getName());
+                LoggerHelper.logData(Level.INFO,"user is activated",correlationToken,authorization, ActivateUserAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
             }
             mongoTemplate.updateFirst(

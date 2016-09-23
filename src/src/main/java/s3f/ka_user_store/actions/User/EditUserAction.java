@@ -1,4 +1,4 @@
-package s3f.ka_user_store.actions.User;
+package s3f.ka_user_store.actions.user;
 
 import org.apache.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +29,20 @@ public class EditUserAction implements UserActions<UserDto> {
                                                      String authorization,
                                                      String correlationToken,
                                                      UserDto userDto) {
-        LoggerHelper.logData(Level.INFO,"Edit User",correlationToken,authorization, EditUserAction.class.getName());
+        LoggerHelper.logData(Level.INFO,"Edit user",correlationToken,authorization, EditUserAction.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(userDto.getUserId())
                     .andOperator(Criteria.where("email").is(userDto.getEmail()))), UserDto.class);
             if (userDtoTemp == null) {
-                LoggerHelper.logData(Level.INFO,"User not found.",correlationToken,authorization, EditUserAction.class.getName());
+                LoggerHelper.logData(Level.INFO,"user not found.",correlationToken,authorization, EditUserAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             //ToDo: Prüfung ob Unterliste Role leer ist!!
             mongoTemplate.save(userDto);
-            LoggerHelper.logData(Level.INFO,"User successful stored.",correlationToken,authorization, EditUserAction.class.getName());
+            LoggerHelper.logData(Level.INFO,"user successful stored.",correlationToken,authorization, EditUserAction.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (Exception e) {
-            LoggerHelper.logData(Level.ERROR,"User unsuccessful stored",correlationToken,authorization, EditUserAction.class.getName(),e);
+            LoggerHelper.logData(Level.ERROR,"user unsuccessful stored",correlationToken,authorization, EditUserAction.class.getName(),e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

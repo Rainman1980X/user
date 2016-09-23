@@ -1,4 +1,4 @@
-package s3f.ka_user_store.actions.User;
+package s3f.ka_user_store.actions.user;
 
 import org.apache.log4j.Level;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -23,7 +23,7 @@ public class GetRoleListOfUser implements UserActions<Map<String,String>> {
                                                        Map<String,String> httpValues) {
         UserDto userDtoTemp = userRepository.findOneByUserId(httpValues.get("userId"));
         if(userDtoTemp == null){
-            LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, GetRoleListOfUser.class.getName());
+            LoggerHelper.logData(Level.INFO,"user not found",correlationToken,authorization, GetRoleListOfUser.class.getName());
             return new ResponseEntity<List<String>>(new ArrayList<String>(), HttpStatus.NOT_FOUND);
         }
         if(userDtoTemp.getRoles().isEmpty()){

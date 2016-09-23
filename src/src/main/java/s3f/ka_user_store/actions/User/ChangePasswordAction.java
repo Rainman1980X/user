@@ -1,4 +1,4 @@
-package s3f.ka_user_store.actions.User;
+package s3f.ka_user_store.actions.user;
 
 import org.apache.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,12 @@ public class ChangePasswordAction implements UserActions<Map<String, String>> {
                                                      String authorization,
                                                      String correlationToken,
                                                      Map<String, String> httpValues) {
-        LoggerHelper.logData(Level.INFO,"Set a new password for the User",correlationToken,authorization, ChangePasswordAction.class.getName());
+        LoggerHelper.logData(Level.INFO,"Set a new password for the user",correlationToken,authorization, ChangePasswordAction.class.getName());
         try {
             UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
 
             if (userDtoTemp == null) {
-                LoggerHelper.logData(Level.INFO,"User not found",correlationToken,authorization, ChangePasswordAction.class.getName());
+                LoggerHelper.logData(Level.INFO,"user not found",correlationToken,authorization, ChangePasswordAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             if ((httpValues.get("password")).equals(userDtoTemp.getPassword())) {

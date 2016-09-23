@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import s3f.ka_user_store.actions.User.GetAllUserAction;
 import s3f.ka_user_store.actions.company.*;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.UserDto;
@@ -92,7 +91,7 @@ public class CompanyController {
     @ApiOperation(value = "Get company by companyId.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = UserDto.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "User list is empty.", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NO_CONTENT, message = "user list is empty.", response = UserDto.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = UserDto.class)
     })
     public ResponseEntity<List<String>> getAssigendUser(@RequestHeader(value = "Authorization") String authorization,

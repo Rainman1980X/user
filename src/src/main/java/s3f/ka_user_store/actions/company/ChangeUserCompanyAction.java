@@ -8,11 +8,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import s3f.ka_user_store.actions.User.UserActions;
 import s3f.ka_user_store.dtos.CompanyDto;
-import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
-import s3f.ka_user_store.interfaces.UserRepository;
 import s3f.ka_user_store.logging.LoggerHelper;
 
 import java.util.List;
@@ -39,7 +36,7 @@ public class ChangeUserCompanyAction implements CompanyActions<Map<String, Strin
             }
             companyDtoTemp.getAssignedUserId().forEach(item -> LoggerHelper.logData(Level.INFO, item, correlationToken, authorization, ChangeUserCompanyAction.class.getName()));
             List<String> assignedUserIdList = Stream.of(httpValues.get("assignedUserList").split(",")).collect(Collectors.toList());
-            //ToDo: Prüfung ob Unterliste User leer ist!!
+            //ToDo: Prüfung ob Unterliste user leer ist!!
             mongoTemplate.updateFirst(
                     new Query(Criteria.where("_id").is(companyDtoTemp.getCompanyId())),
                     Update.update("assignedUserId", assignedUserIdList), CompanyDto.class);

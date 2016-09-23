@@ -1,16 +1,11 @@
 package s3f.ka_user_store.actions.company;
 
 import org.apache.log4j.Level;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import s3f.ka_user_store.actions.User.UserActions;
 import s3f.ka_user_store.dtos.CompanyDto;
-import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
-import s3f.ka_user_store.interfaces.UserRepository;
 import s3f.ka_user_store.logging.LoggerHelper;
 
 import java.util.Map;

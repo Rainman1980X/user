@@ -1,4 +1,4 @@
-package s3f.ka_user_store.actions.User;
+package s3f.ka_user_store.actions.user;
 
 import org.apache.log4j.Level;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -22,7 +22,7 @@ public class GetAllUserAction implements UserActions<Map<String,String>> {
                                                         String authorization,
                                                         String correlationToken,
                                                         Map<String,String> httpValues) {
-        LoggerHelper.logData(Level.INFO,"Get all User",correlationToken,authorization, GetAllUserAction.class.getName());
+        LoggerHelper.logData(Level.INFO,"Get all user",correlationToken,authorization, GetAllUserAction.class.getName());
         List<UserDto> userList = userRepository.findAll();
         if(userList.isEmpty()){
             LoggerHelper.logData(Level.INFO,"No user found",correlationToken,authorization, GetAllUserAction.class.getName());

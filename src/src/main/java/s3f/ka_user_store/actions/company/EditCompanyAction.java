@@ -37,7 +37,7 @@ public class EditCompanyAction implements CompanyActions<CompanyDto> {
                 LoggerHelper.logData(Level.INFO,"Company not found.",correlationToken,authorization, EditCompanyAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
-            //ToDo: Prüfung ob Unterliste User leer ist!!
+            //ToDo: Prüfung ob Unterliste user leer ist!!
             mongoTemplate.save(companyDto);
             LoggerHelper.logData(Level.INFO,"Company successful stored.",correlationToken,authorization, EditCompanyAction.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);

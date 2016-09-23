@@ -1,4 +1,4 @@
-package s3f.ka_user_store.actions.User;
+package s3f.ka_user_store.actions.user;
 
 import org.apache.log4j.Level;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,19 +25,19 @@ public class CreateUserAction implements UserActions<UserDto> {
                                                      String correlationToken,
                                                      UserDto userDto) {
         this.userRepository = userRepository;
-        LoggerHelper.logData(Level.INFO,"Create User",correlationToken,authorization, CreateUserAction.class.getName());
+        LoggerHelper.logData(Level.INFO,"Create user",correlationToken,authorization, CreateUserAction.class.getName());
         if (hasDoubleEntry(userDto.getEmail())) {
-            LoggerHelper.logData(Level.INFO,"User is duplicate.",correlationToken,authorization, CreateUserAction.class.getName());
+            LoggerHelper.logData(Level.INFO,"user is duplicate.",correlationToken,authorization, CreateUserAction.class.getName());
             return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.CONFLICT);
         }
 
         try {
             userDto.setUserId(UUID.randomUUID().toString());
             UserDto newUserDto = this.userRepository.save(userDto);
-            LoggerHelper.logData(Level.INFO,"User successful created",correlationToken,authorization, CreateUserAction.class.getName());
+            LoggerHelper.logData(Level.INFO,"user successful created",correlationToken,authorization, CreateUserAction.class.getName());
             return new ResponseEntity<UserDto>(newUserDto,HttpStatus.OK);
         } catch (Exception e) {
-            LoggerHelper.logData(Level.ERROR,"User can't be saved",correlationToken,authorization, CreateUserAction.class.getName());
+            LoggerHelper.logData(Level.ERROR,"user can't be saved",correlationToken,authorization, CreateUserAction.class.getName());
             return new ResponseEntity<UserDto>(new UserDto(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

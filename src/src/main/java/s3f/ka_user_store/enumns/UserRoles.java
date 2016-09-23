@@ -12,7 +12,7 @@ import java.util.Map;
 public enum UserRoles {
 
     ADMINISTRATOR("Administrator"),
-    USER("User"),
+    USER("user"),
     VALIDATOR("Validator"),
     RESPONSIBLE("Responsible");
 
