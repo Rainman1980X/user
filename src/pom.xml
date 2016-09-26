@@ -83,7 +83,7 @@
             <artifactId>lib-share</artifactId>
             <scope>system</scope>
             <version>1.0</version>
-            <systemPath>${basedir}\src\main\resources\libs\sintec.s3f.lib-shared-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/libs/sintec.s3f.lib-shared-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
 
     </dependencies>
