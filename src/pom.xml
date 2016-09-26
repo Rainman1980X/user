@@ -78,6 +78,14 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>lib-share</groupId>
+            <artifactId>lib-share</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}\src\main\resources\libs\sintec.s3f.lib-shared-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <properties>

@@ -11,6 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="sintec.s3f.lib-shared-1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:1.4.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:1.4.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:8.5.4" level="project" />
@@ -89,6 +90,14 @@
     <orderEntry type="library" name="Maven: org.mongodb:bson:3.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-mongodb:1.9.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.12.2.RELEASE" level="project" />
-    <orderEntry type="library" name="sintec.s3f.lib-shared-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: lib-share:lib-share:1.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/src/main/resources/libs/sintec.s3f.lib-shared-1.0-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
