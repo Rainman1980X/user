@@ -1,21 +1,30 @@
 package s3f;
 
-import org.apache.log4j.BasicConfigurator;
+
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import s3f.framework.config.S3FPlaceholderConfigurer;
+import s3f.framework.interfaces.ApplicationConstants;
 import s3f.framework.lifecycle.LifeCycle;
 import s3f.framework.lifecycle.LifecycleUrlDictionary;
+import s3f.framework.logger.LoggerHelper;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
 
 
 @SpringBootApplication
-public class Application {
-    public static final Logger LOGGER_DEFAULT = Logger.getLogger("default");
-    public static final Logger LOGGER_DEBUG = Logger.getLogger("debug");
+public class Application implements ApplicationConstants {
     private static String[] args;
     public static final String version = "v1";
+    public final static String configServerAddress = "http://192.168.8.103:30000";
+    public static final String configServiceAddress = "/api/v1/s3f-configuration/{serviceName}/{version}/{lifecycle}/";
     public static String lifecycle;
     public final static String serviceName = "ka-user-store";
     public final static boolean useConfigService = true;
@@ -30,8 +39,8 @@ public class Application {
         new LifecycleUrlDictionary().check(args);
         Application.lifecycle = new LifecycleUrlDictionary().getKey(args);
         SpringApplication.run(Application.class, args);
-        LOGGER_DEFAULT.setLevel(Level.INFO);
-        LOGGER_DEBUG.setLevel(Level.DEBUG);
+        S3FPlaceholderConfigurer.initConfig(new Application());
+        LoggerHelper.initialize(new Application());
     }
 
     @Bean
@@ -44,5 +53,53 @@ public class Application {
             }
         }
         return new LifeCycle(result);
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/v1").allowedOrigins("*");
+                registry.addMapping("/api/v1").allowedMethods("POST,PUT, GET, OPTIONS, DELETE");
+                registry.addMapping("/api/v1").allowedHeaders("Access-Control-Allow-Headers,Origin, X-Requested-With, Content-Type, Accept,AUTH-TOKEN");
+
+            }
+        };
+    }
+
+    @Override
+    public String getVersion() {
+        return version;
+    }
+
+    @Override
+    public String getLifecycle() {
+        return lifecycle;
+    }
+
+    @Override
+    public URL getConfigServerAddress() {
+        try {
+            return new URL(configServerAddress);
+        } catch (MalformedURLException e) {
+            LoggerHelper.logData(Level.ERROR,e.getMessage(),"token","token",Application.class.getName());
+        }
+        return null;
+    }
+
+    @Override
+    public String getConfigServiceAddress() {
+        return configServiceAddress;
+    }
+
+    @Override
+    public Map<String, String> getConfigServiceArguments() {
+        return null;
+    }
+
+    @Override
+    public boolean getUseConfigService() {
+        return false;
     }
 }

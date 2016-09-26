@@ -6,8 +6,8 @@ import s3f.Application;
 
 public final class LoggerHelper {
 
-	private static final Logger LOGGER_DEFAULT = Application.LOGGER_DEFAULT;
-	private static final Logger LOGGER_DEBUG = Application.LOGGER_DEBUG;
+	private static final Logger LOGGER_DEFAULT = Logger.getLogger("default");
+	private static final Logger LOGGER_DEBUG = Logger.getLogger("debug");
 
 	private final static String seperator = "|";
 	
