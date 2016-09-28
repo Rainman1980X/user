@@ -7,10 +7,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import s3f.framework.logger.LoggerHelper;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
 import s3f.ka_user_store.interfaces.UserRepository;
-import s3f.ka_user_store.logging.LoggerHelper;
+
 
 /**
  * Created by MSBurger on 16.09.2016.

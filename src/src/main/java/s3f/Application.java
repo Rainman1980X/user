@@ -1,6 +1,10 @@
 package s3f;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
 import org.apache.log4j.Level;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,15 +12,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import s3f.framework.config.S3FPlaceholderConfigurer;
+
 import s3f.framework.interfaces.ApplicationConstants;
 import s3f.framework.lifecycle.LifeCycle;
 import s3f.framework.lifecycle.LifecycleUrlDictionary;
 import s3f.framework.logger.LoggerHelper;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
 
 
 @SpringBootApplication
@@ -39,8 +39,6 @@ public class Application implements ApplicationConstants {
         new LifecycleUrlDictionary().check(args);
         Application.lifecycle = new LifecycleUrlDictionary().getKey(args);
         SpringApplication.run(Application.class, args);
-        S3FPlaceholderConfigurer.initConfig(new Application());
-        LoggerHelper.initialize(new Application());
     }
 
     @Bean
@@ -102,4 +100,10 @@ public class Application implements ApplicationConstants {
     public boolean getUseConfigService() {
         return false;
     }
+
+	@Override
+	public String getServiceName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

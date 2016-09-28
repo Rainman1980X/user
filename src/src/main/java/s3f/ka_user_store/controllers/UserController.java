@@ -1,21 +1,37 @@
 package s3f.ka_user_store.controllers;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import s3f.ka_user_store.actions.user.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import s3f.ka_user_store.actions.user.ActivateUserAction;
+import s3f.ka_user_store.actions.user.ChangePasswordAction;
+import s3f.ka_user_store.actions.user.ChangeRoleListAction;
+import s3f.ka_user_store.actions.user.CreateUserAction;
+import s3f.ka_user_store.actions.user.DeactivateUserAction;
+import s3f.ka_user_store.actions.user.EditUserAction;
+import s3f.ka_user_store.actions.user.GetAllUserAction;
+import s3f.ka_user_store.actions.user.GetRoleList;
+import s3f.ka_user_store.actions.user.GetRoleListOfUser;
+import s3f.ka_user_store.actions.user.GetUserAction;
+import s3f.ka_user_store.actions.user.GetUserStatus;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
 import sun.net.www.protocol.http.HttpURLConnection;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by MSBurger on 09.09.2016.
