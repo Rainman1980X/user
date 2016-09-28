@@ -3,3 +3,7 @@
 target
 ka-upload.iml
 *.log
+/src/*.classpath
+/src/*.project
+/src/.settings/*.prefs
+/src/.settings/*.xml
