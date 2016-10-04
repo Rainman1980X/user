@@ -90,7 +90,6 @@ public class Application implements ApplicationConstants {
 
 	@Override
 	public String getServiceName() {
-		// TODO Auto-generated method stub
-		return null;
+		return serviceName;
 	}
 }
