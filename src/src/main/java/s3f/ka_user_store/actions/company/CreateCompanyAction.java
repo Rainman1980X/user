@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import s3f.framework.logger.LoggerHelper;
-import s3f.ka_user_store.actions.user.CreateUserAction;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
 
@@ -28,9 +27,11 @@ public class CreateCompanyAction implements CompanyActions<CompanyDto> {
                                                String correlationToken,
                                                CompanyDto companyDto) {
         this.companyRepository = companyRepository;
-        LoggerHelper.logData(Level.INFO,"Create company",correlationToken,authorization, CreateUserAction.class.getName());
+	LoggerHelper.logData(Level.INFO, "Create company", correlationToken, authorization,
+		CreateCompanyAction.class.getName());
         if (hasDoubleEntry(companyDto.getCustomerNumber())) {
-            LoggerHelper.logData(Level.INFO,"Company is duplicate.",correlationToken,authorization, CreateUserAction.class.getName());
+	    LoggerHelper.logData(Level.INFO, "Company is duplicate.", correlationToken, authorization,
+		    CreateCompanyAction.class.getName());
             return new ResponseEntity<CompanyDto>(new CompanyDto(), HttpStatus.CONFLICT);
         }
 
@@ -45,7 +46,7 @@ public class CreateCompanyAction implements CompanyActions<CompanyDto> {
         }
     }
 
-    private boolean hasDoubleEntry(String customerNumber) {
-        return companyRepository.findOneByCustomerNumber(customerNumber) != null;
+    private boolean hasDoubleEntry(String companyId) {
+	return this.companyRepository.findOneByCompanyId(companyId) != null;
     }
 }

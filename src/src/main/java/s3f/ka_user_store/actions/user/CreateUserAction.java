@@ -28,22 +28,25 @@ public class CreateUserAction implements UserActions<UserDto> {
         this.userRepository = userRepository;
         LoggerHelper.logData(Level.INFO,"Create user",correlationToken,authorization, CreateUserAction.class.getName());
         if (hasDoubleEntry(userDto.getEmail())) {
-            LoggerHelper.logData(Level.INFO,"user is duplicate.",correlationToken,authorization, CreateUserAction.class.getName());
+	    LoggerHelper.logData(Level.INFO, "User is duplicate.", correlationToken, authorization,
+		    CreateUserAction.class.getName());
             return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.CONFLICT);
         }
 
         try {
             userDto.setUserId(UUID.randomUUID().toString());
             UserDto newUserDto = this.userRepository.save(userDto);
-            LoggerHelper.logData(Level.INFO,"user successful created",correlationToken,authorization, CreateUserAction.class.getName());
+	    LoggerHelper.logData(Level.INFO, "User successful created", correlationToken, authorization,
+		    CreateUserAction.class.getName());
             return new ResponseEntity<UserDto>(newUserDto,HttpStatus.OK);
         } catch (Exception e) {
-            LoggerHelper.logData(Level.ERROR,"user can't be saved",correlationToken,authorization, CreateUserAction.class.getName());
+	    LoggerHelper.logData(Level.ERROR, "User can't be saved", correlationToken, authorization,
+		    CreateUserAction.class.getName());
             return new ResponseEntity<UserDto>(new UserDto(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     private boolean hasDoubleEntry(String email) {
-        return userRepository.findOneByEmail(email) != null;
+	return this.userRepository.findOneByEmail(email) != null;
     }
 }
