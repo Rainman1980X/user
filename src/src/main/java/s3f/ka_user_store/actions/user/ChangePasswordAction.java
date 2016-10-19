@@ -20,7 +20,7 @@ import s3f.ka_user_store.interfaces.UserRepository;
  * Created by MSBurger on 12.09.2016.
  */
 @Service
-public class ChangePasswordAction implements UserActions<Map<String, String>> {
+public class ChangePasswordAction {
     @Autowired
     private UserRepository userRepository;
 
@@ -29,31 +29,33 @@ public class ChangePasswordAction implements UserActions<Map<String, String>> {
     private String authorization;
     private String correlationToken;
 
-    @Override
     public ResponseEntity<HttpStatus> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
-                                                     String authorization,
-                                                     String correlationToken,
-                                                     Map<String, String> httpValues) {
-        LoggerHelper.logData(Level.INFO,"Set a new password for the user",correlationToken,authorization, ChangePasswordAction.class.getName());
+            String authorization, String correlationToken, Map<String, String> httpValues) {
+        LoggerHelper.logData(Level.INFO, "Set a new password for the user", correlationToken, authorization,
+                ChangePasswordAction.class.getName());
         try {
-            UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
+            UserDto userDtoTemp = mongoTemplate
+                    .findOne(new Query(Criteria.where("userId").is(httpValues.get("userId"))), UserDto.class);
 
             if (userDtoTemp == null) {
-                LoggerHelper.logData(Level.INFO,"user not found",correlationToken,authorization, ChangePasswordAction.class.getName());
+                LoggerHelper.logData(Level.INFO, "user not found", correlationToken, authorization,
+                        ChangePasswordAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
             if ((httpValues.get("password")).equals(userDtoTemp.getPassword())) {
-                LoggerHelper.logData(Level.INFO,"Password was not changed",correlationToken,authorization, ChangePasswordAction.class.getName());
+                LoggerHelper.logData(Level.INFO, "Password was not changed", correlationToken, authorization,
+                        ChangePasswordAction.class.getName());
                 return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
             }
-            mongoTemplate.updateFirst(
-                    new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
+            mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(userDtoTemp.getUserId())),
                     Update.update("password", httpValues.get("password")), UserDto.class);
-            LoggerHelper.logData(Level.INFO,"Password of the user successful changed",correlationToken,authorization, ChangePasswordAction.class.getName());
+            LoggerHelper.logData(Level.INFO, "Password of the user successful changed", correlationToken, authorization,
+                    ChangePasswordAction.class.getName());
             return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 
         } catch (Exception e) {
-            LoggerHelper.logData(Level.INFO,"Password change fails.",correlationToken,authorization, ChangePasswordAction.class.getName(),e);
+            LoggerHelper.logData(Level.INFO, "Password change fails.", correlationToken, authorization,
+                    ChangePasswordAction.class.getName(), e);
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

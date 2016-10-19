@@ -16,28 +16,27 @@ import s3f.ka_user_store.interfaces.UserRepository;
  * Created by MSBurger on 12.09.2016.
  */
 @Service
-public class EditUserAction implements UserActions<UserDto> {
+public class EditUserAction {
 
-    @Override
     public ResponseEntity<HttpStatus> doActionOnUser(UserRepository userRepository, MongoTemplate mongoTemplate,
-	    String authorization, String correlationToken, UserDto userDto) {
-	LoggerHelper.logData(Level.INFO, "Edit user", correlationToken, authorization, EditUserAction.class.getName());
-	try {
-	    UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(userDto.getUserId())
-		    .andOperator(Criteria.where("email").is(userDto.getEmail()))), UserDto.class);
-	    if (userDtoTemp == null) {
-		LoggerHelper.logData(Level.INFO, "user not found.", correlationToken, authorization,
-			EditUserAction.class.getName());
-		return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
-	    }
-	    mongoTemplate.save(userDto);
-	    LoggerHelper.logData(Level.INFO, "user successful stored.", correlationToken, authorization,
-		    EditUserAction.class.getName());
-	    return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-	} catch (Exception e) {
-	    LoggerHelper.logData(Level.ERROR, "user unsuccessful stored", correlationToken, authorization,
-		    EditUserAction.class.getName(), e);
-	    return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+            String authorization, String correlationToken, UserDto userDto) {
+        LoggerHelper.logData(Level.INFO, "Edit user", correlationToken, authorization, EditUserAction.class.getName());
+        try {
+            UserDto userDtoTemp = mongoTemplate.findOne(new Query(Criteria.where("userId").is(userDto.getUserId())
+                    .andOperator(Criteria.where("email").is(userDto.getEmail()))), UserDto.class);
+            if (userDtoTemp == null) {
+                LoggerHelper.logData(Level.INFO, "user not found.", correlationToken, authorization,
+                        EditUserAction.class.getName());
+                return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+            }
+            mongoTemplate.save(userDto);
+            LoggerHelper.logData(Level.INFO, "user successful stored.", correlationToken, authorization,
+                    EditUserAction.class.getName());
+            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+        } catch (Exception e) {
+            LoggerHelper.logData(Level.ERROR, "user unsuccessful stored", correlationToken, authorization,
+                    EditUserAction.class.getName(), e);
+            return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

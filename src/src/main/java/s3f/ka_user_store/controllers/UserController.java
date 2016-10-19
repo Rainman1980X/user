@@ -191,6 +191,6 @@ public class UserController {
     })
     public ResponseEntity<List<String>> getRoleList(@RequestHeader(value = "Authorization") String authorization,
                                                  @RequestHeader(value = "CorrelationToken") String correlationToken) {
-        return (new GetRoleList()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken, new Object());
+        return (new GetRoleList()).doActionOnUser(authorization, correlationToken);
     }
 }
