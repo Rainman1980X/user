@@ -22,7 +22,6 @@ public class Application implements ApplicationConstants {
     public static final String configServiceAddress = "/api/v1/s3f-configuration/completion/{serviceName}/{version}/{lifecycle}/";
     public static String lifecycle;
     public final static String serviceName = "ka-user-store";
-    public final static boolean useConfigService = true;
 
     /**
      * lifecycle (i.a. -develop, -test, -stage, -production)
@@ -76,11 +75,6 @@ public class Application implements ApplicationConstants {
     @Override
     public Map<String, String> getConfigServiceArguments() {
         return null;
-    }
-
-    @Override
-    public boolean isUsingConfigService() {
-        return useConfigService;
     }
 
     @Override
