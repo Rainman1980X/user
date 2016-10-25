@@ -2,6 +2,7 @@ package s3f;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Level;
@@ -74,7 +75,11 @@ public class Application implements ApplicationConstants {
 
     @Override
     public Map<String, String> getConfigServiceArguments() {
-        return null;
+        HashMap<String,String> map = new HashMap<>();
+        map.put("serviceName",serviceName);
+        map.put("version",version);
+        map.put("lifecycle",lifecycle);
+        return map;
     }
 
     @Override
