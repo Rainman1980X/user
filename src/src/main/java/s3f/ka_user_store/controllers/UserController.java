@@ -144,7 +144,7 @@ public class UserController {
                 httpsValues);
     }
 
-    @RequestMapping(value = "/api/v1/user-store/user/email/{email}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/v1/user-store/user/email/{email:.+}", method = RequestMethod.GET)
     @ApiOperation(value = "Get user by email.", produces = "application/json",consumes = "application/json")
     @ApiResponses(value = {
 	    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),

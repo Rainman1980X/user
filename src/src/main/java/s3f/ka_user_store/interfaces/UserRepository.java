@@ -1,6 +1,7 @@
 package s3f.ka_user_store.interfaces;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+
 import s3f.ka_user_store.dtos.UserDto;
 
 /**
@@ -8,5 +9,6 @@ import s3f.ka_user_store.dtos.UserDto;
  */
 public interface UserRepository extends MongoRepository<UserDto, String> {
     public UserDto findOneByUserId(String userId);
-    public UserDto findOneByEmail(String Email);
+
+    public UserDto findOneByEmail(String email);
 }
