@@ -28,6 +28,7 @@ import s3f.ka_user_store.actions.user.GetAllUserAction;
 import s3f.ka_user_store.actions.user.GetRoleList;
 import s3f.ka_user_store.actions.user.GetRoleListOfUser;
 import s3f.ka_user_store.actions.user.GetUserAction;
+import s3f.ka_user_store.actions.user.GetUserByEmailAction;
 import s3f.ka_user_store.actions.user.GetUserStatus;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
@@ -133,15 +134,26 @@ public class UserController {
     @RequestMapping(value = "/api/v1/user-store/user/{userId}", method = RequestMethod.GET)
     @ApiOperation(value = "Get user by userID.", produces = "application/json",consumes = "application/json")
     @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class) })
+    public ResponseEntity<UserDto> getUser(@RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId) {
+        Map<String, String> httpsValues = new HashMap<>();
+        httpsValues.put("userId", userId);
+        return (new GetUserAction()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken,
+                httpsValues);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/user/email/{email}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get user by email.", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
 	    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
 	    @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class)
     })
-    public ResponseEntity<UserDto> getUser(@RequestHeader(value = "Authorization") String authorization,
+    public ResponseEntity<UserDto> getUserByEmail(@RequestHeader(value = "Authorization") String authorization,
                                            @RequestHeader(value = "CorrelationToken") String correlationToken,
-                                           @PathVariable("userId") String userId) {
-        Map<String,String> httpsValues = new HashMap<>();
-        httpsValues.put("userId",userId);
-        return (new GetUserAction()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken, httpsValues);
+                                           @PathVariable("email") String email) {
+        return (new GetUserByEmailAction()).doActionOnUser(userRepository, authorization, correlationToken, email);
     }
 
     @RequestMapping(value = "/api/v1/user-store/user/list", method = RequestMethod.GET)
