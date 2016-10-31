@@ -1,17 +1,15 @@
 package s3f.ka_user_store.dtos;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.springframework.data.domain.Persistable;
 
 import org.springframework.data.annotation.Id;
-
-import javax.annotation.Generated;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by MSBurger on 09.09.2016.
  */
+@Document
 public class UserDto {
     @Id
     public String userId;

@@ -37,7 +37,7 @@ public class LoginController {
     // /login/encrypt/{uuid}
 
     @RequestMapping(value = "/login/encrypt/{userId}", method = RequestMethod.GET)
-    @ApiOperation(value = "Get user by userID.", produces = "application/json", consumes = "application/json")
+    @ApiOperation(value = "Get encrypted String of user.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class) })
@@ -49,8 +49,8 @@ public class LoginController {
 
     // /login/decrypt/{encryptedValue}
 
-    @RequestMapping(value = "/login/encrypt/{enscriptedValue}", method = RequestMethod.GET)
-    @ApiOperation(value = "Get user by userID.", produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/login/decrypt/{encryptedValue}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get decrypted user.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class) })
@@ -62,6 +62,18 @@ public class LoginController {
                 httpsValues);
     }
 
+    @RequestMapping(value = "/jwt/user/{userID}", method = RequestMethod.GET)
+    @ApiOperation(value = "Create JWT token from UserID", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class) })
+    public ResponseEntity<UserDto> getJwtByUserId(@RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId) {
+        Map<String, String> httpsValues = new HashMap<>();
+        httpsValues.put("userId", userId);
+        return (new GetUserAction()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken,
+                httpsValues);
+    }
     // /jwt/create-user/{uuid}?company=companyId
 
     // /jwt/create-user-company/{uuid}/{companyId}

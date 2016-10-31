@@ -27,6 +27,7 @@ import s3f.ka_user_store.actions.company.GetCompanyAction;
 import s3f.ka_user_store.actions.company.GetCompanyListByUserId;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.UserDto;
+import s3f.ka_user_store.dtos.UserRoleDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
 
 /**
@@ -78,14 +79,11 @@ public class CompanyController {
             @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Assigned user list change fails.", response = HttpStatus.class) })
     public ResponseEntity<HttpStatus> changeAssigendUser(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken,
-            @PathVariable("companyId") String companyId,
-            @PathVariable("assignedUserList") List<String> assignedUserList) {
-        Map<String, String> httpsValues = new HashMap<>();
-        httpsValues.put("companyId", companyId);
-        httpsValues.put("assignedUserList", String.join(",", assignedUserList));
+            @RequestBody List<UserRoleDto> assignedUserWithRoles,
+            @PathVariable("companyId") String companyId) {
 
         return (new ChangeUserCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization,
-                correlationToken, httpsValues);
+                correlationToken, companyId, assignedUserWithRoles);
     }
 
     @RequestMapping(value = "/api/v1/user-store/company/{companyId}", method = RequestMethod.GET)
@@ -104,8 +102,8 @@ public class CompanyController {
     @RequestMapping(value = "/api/v1/user-store/company/list/{userId}", method = RequestMethod.GET)
     @ApiOperation(value = "Get company by userId.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = UserDto.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = UserDto.class) })
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = CompanyDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = CompanyDto.class) })
     public ResponseEntity< List<CompanyDto>> getCompanyByUserId(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken,
             @PathVariable("userId") String userId) {

@@ -1,8 +1,8 @@
 package s3f.ka_user_store.dtos;
 
-import org.springframework.data.annotation.Id;
-
 import java.util.List;
+
+import org.springframework.data.annotation.Id;
 
 /**
  * Created by MSBurger on 09.09.2016.
@@ -15,19 +15,14 @@ public class CompanyDto {
     public String zipcode;
     public String locality;
     public String customerNumber;
-    public String vatId; //Umsatzsteuer-Identifikationsnummer
-    public List<String> assignedUserId;
+    public String vatId; // Umsatzsteuer-Identifikationsnummer
+    public List<UserRoleDto> assignedUserWithRole;
 
-    public CompanyDto(){}
+    public CompanyDto() {
+    }
 
-    public CompanyDto(String companyId,
-                      String name,
-                      String street,
-                      String zipcode,
-                      String locality,
-                      String customerNumber,
-                      String vatId,
-                      List<String> assignedUserId) {
+    public CompanyDto(String companyId, String name, String street, String zipcode, String locality,
+            String customerNumber, String vatId, List<UserRoleDto> assignedUserWithRole) {
         this.companyId = companyId;
         this.name = name;
         this.street = street;
@@ -35,7 +30,7 @@ public class CompanyDto {
         this.locality = locality;
         this.customerNumber = customerNumber;
         this.vatId = vatId;
-        this.assignedUserId.addAll(assignedUserId) ; // create a local copy
+        this.assignedUserWithRole = assignedUserWithRole; // create a local copy
     }
 
     public String getCompanyId() {
@@ -66,8 +61,8 @@ public class CompanyDto {
         return vatId;
     }
 
-    public List<String> getAssignedUserId() {
-        return assignedUserId; // While returning create a new List !!
+    public List<UserRoleDto> getAssignedUserWithRole() {
+        return assignedUserWithRole; // While returning create a new List !!
     }
 
     public void setCompanyId(String companyId) {
@@ -98,52 +93,81 @@ public class CompanyDto {
         this.vatId = vatId;
     }
 
-    public void setAssignedUserId(List<String> assignedUserId) {
-        this.assignedUserId.addAll(assignedUserId);
+    public void setAssignedUserWithRole(List<UserRoleDto> assignedUserWithRole) {
+        this.assignedUserWithRole = assignedUserWithRole;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CompanyDto)) return false;
-
-        CompanyDto that = (CompanyDto) o;
-
-        if (companyId != null ? !companyId.equals(that.companyId) : that.companyId != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (street != null ? !street.equals(that.street) : that.street != null) return false;
-        if (zipcode != null ? !zipcode.equals(that.zipcode) : that.zipcode != null) return false;
-        if (locality != null ? !locality.equals(that.locality) : that.locality != null) return false;
-        if (customerNumber != null ? !customerNumber.equals(that.customerNumber) : that.customerNumber != null)
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
             return false;
-        return vatId != null ? vatId.equals(that.vatId) : that.vatId == null;
-
+        if (getClass() != obj.getClass())
+            return false;
+        CompanyDto other = (CompanyDto) obj;
+        if (assignedUserWithRole == null) {
+            if (other.assignedUserWithRole != null)
+                return false;
+        } else if (!assignedUserWithRole.equals(other.assignedUserWithRole))
+            return false;
+        if (companyId == null) {
+            if (other.companyId != null)
+                return false;
+        } else if (!companyId.equals(other.companyId))
+            return false;
+        if (customerNumber == null) {
+            if (other.customerNumber != null)
+                return false;
+        } else if (!customerNumber.equals(other.customerNumber))
+            return false;
+        if (locality == null) {
+            if (other.locality != null)
+                return false;
+        } else if (!locality.equals(other.locality))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (street == null) {
+            if (other.street != null)
+                return false;
+        } else if (!street.equals(other.street))
+            return false;
+        if (vatId == null) {
+            if (other.vatId != null)
+                return false;
+        } else if (!vatId.equals(other.vatId))
+            return false;
+        if (zipcode == null) {
+            if (other.zipcode != null)
+                return false;
+        } else if (!zipcode.equals(other.zipcode))
+            return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = companyId != null ? companyId.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (street != null ? street.hashCode() : 0);
-        result = 31 * result + (zipcode != null ? zipcode.hashCode() : 0);
-        result = 31 * result + (locality != null ? locality.hashCode() : 0);
-        result = 31 * result + (customerNumber != null ? customerNumber.hashCode() : 0);
-        result = 31 * result + (vatId != null ? vatId.hashCode() : 0);
-        result = 31 * result + (assignedUserId != null ? assignedUserId.hashCode() : 0);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((assignedUserWithRole == null) ? 0 : assignedUserWithRole.hashCode());
+        result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
+        result = prime * result + ((customerNumber == null) ? 0 : customerNumber.hashCode());
+        result = prime * result + ((locality == null) ? 0 : locality.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((street == null) ? 0 : street.hashCode());
+        result = prime * result + ((vatId == null) ? 0 : vatId.hashCode());
+        result = prime * result + ((zipcode == null) ? 0 : zipcode.hashCode());
         return result;
     }
 
     @Override
     public String toString() {
-        return "CompanyDto{" +
-                "companyId='" + companyId + '\'' +
-                ", name='" + name + '\'' +
-                ", street='" + street + '\'' +
-                ", zipcode='" + zipcode + '\'' +
-                ", locality='" + locality + '\'' +
-                ", customernumber='" + customerNumber + '\'' +
-                ", vatId='" + vatId + '\'' +
-                ", assignedUserId='" + String.join(",",assignedUserId) + '\'' +
-                '}';
+        return "CompanyDto [companyId=" + companyId + ", name=" + name + ", street=" + street + ", zipcode=" + zipcode
+                + ", locality=" + locality + ", customerNumber=" + customerNumber + ", vatId=" + vatId
+                + ", assignedUserWithRole=" + assignedUserWithRole.toString() + "]";
     }
 }

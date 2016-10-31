@@ -18,7 +18,8 @@ public class GetCompanyListByUserId {
             String correlationToken, String userId) {
         LoggerHelper.logData(Level.INFO, "Company list which the userID contains", correlationToken, authorization,
                 GetCompanyListByUserId.class.getName());
-        List<CompanyDto> companyList = mongoTemplate.find(new Query(Criteria.where("assignedUserId").in(userId)),
+        List<CompanyDto> companyList = mongoTemplate
+                .find(new Query(Criteria.where("assignedUserWithRole.userId").in(userId)),
                 CompanyDto.class);
         if (companyList.isEmpty()) {
             LoggerHelper.logData(Level.WARN, "Company not found", correlationToken, authorization,
