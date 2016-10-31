@@ -1,5 +1,6 @@
 package s3f.ka_user_store.controllers;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,19 +21,16 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import s3f.ka_user_store.actions.user.ActivateUserAction;
 import s3f.ka_user_store.actions.user.ChangePasswordAction;
-import s3f.ka_user_store.actions.user.ChangeRoleListAction;
 import s3f.ka_user_store.actions.user.CreateUserAction;
 import s3f.ka_user_store.actions.user.DeactivateUserAction;
 import s3f.ka_user_store.actions.user.EditUserAction;
 import s3f.ka_user_store.actions.user.GetAllUserAction;
 import s3f.ka_user_store.actions.user.GetRoleList;
-import s3f.ka_user_store.actions.user.GetRoleListOfUser;
 import s3f.ka_user_store.actions.user.GetUserAction;
 import s3f.ka_user_store.actions.user.GetUserByEmailAction;
 import s3f.ka_user_store.actions.user.GetUserStatus;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
-import sun.net.www.protocol.http.HttpURLConnection;
 
 /**
  * Created by MSBurger on 09.09.2016.
@@ -81,22 +79,6 @@ public class UserController {
         httpsValues.put("userId", userId);
         httpsValues.put("password", newPassword);
         return (new ChangePasswordAction()).doActionOnUser(userRepository, mongoTemplate, authorization,
-                correlationToken, httpsValues);
-    }
-
-    @RequestMapping(value = "/api/v1/user-store/role/{userId}/{roles}", method = RequestMethod.POST)
-    @ApiOperation(value = "Change role of user.", produces = "application/json", consumes = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Role list of the user successful changed", response = HttpStatus.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found.", response = HttpStatus.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Role list change fails.", response = HttpStatus.class) })
-    public ResponseEntity<HttpStatus> changeRole(@RequestHeader(value = "Authorization") String authorization,
-            @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId,
-            @PathVariable("roles") List<String> roles) {
-        Map<String, String> httpsValues = new HashMap<>();
-        httpsValues.put("userId", userId);
-        httpsValues.put("roles", String.join(",", roles));
-        return (new ChangeRoleListAction()).doActionOnUser(userRepository, mongoTemplate, authorization,
                 correlationToken, httpsValues);
     }
 
@@ -157,20 +139,6 @@ public class UserController {
             @RequestHeader(value = "CorrelationToken") String correlationToken) {
         Map<String, String> httpsValues = new HashMap<>();
         return (new GetAllUserAction()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken,
-                httpsValues);
-    }
-
-    @RequestMapping(value = "/api/v1/user-store/{userId}/roles", method = RequestMethod.GET)
-    @ApiOperation(value = "Get list of roles from user.", produces = "application/json", consumes = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "List of roles created.", response = List.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found.", response = List.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Role list is empty", response = List.class) })
-    public ResponseEntity<List<String>> getRoleListOfUser(@RequestHeader(value = "Authorization") String authorization,
-            @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId) {
-        Map<String, String> httpsValues = new HashMap<>();
-        httpsValues.put("userId", userId);
-        return (new GetRoleListOfUser()).doActionOnUser(userRepository, authorization, correlationToken,
                 httpsValues);
     }
 

@@ -21,7 +21,6 @@ public class UserDto {
     public String email; // login
     public String telefon;
     public Date startAccess;
-    public List<String> roles;
     public boolean active;
 
     public UserDto(){
@@ -47,7 +46,6 @@ public class UserDto {
         this.email = email;
         this.telefon = telefon;
         this.startAccess = startAccess;
-        this.roles = roles;
         this.active = active;
     }
 
@@ -85,10 +83,6 @@ public class UserDto {
 
     public Date getStartAccess() {
         return startAccess;
-    }
-
-    public List<String> getRoles() {
-        return roles;
     }
 
     public boolean isActive() {
@@ -131,65 +125,90 @@ public class UserDto {
         this.startAccess = startAccess;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
     public void setActive(boolean active) {
         this.active = active;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserDto)) return false;
-
-        UserDto userDto = (UserDto) o;
-
-        if (active != userDto.active) return false;
-        if (userId != null ? !userId.equals(userDto.userId) : userDto.userId != null) return false;
-        if (!degree.equals(userDto.degree)) return false;
-        if (salutation != null ? !salutation.equals(userDto.salutation) : userDto.salutation != null) return false;
-        if (surename != null ? !surename.equals(userDto.surename) : userDto.surename != null) return false;
-        if (lastname != null ? !lastname.equals(userDto.lastname) : userDto.lastname != null) return false;
-        if (password != null ? !password.equals(userDto.password) : userDto.password != null) return false;
-        if (email != null ? !email.equals(userDto.email) : userDto.email != null) return false;
-        if (telefon != null ? !telefon.equals(userDto.telefon) : userDto.telefon != null) return false;
-        if (startAccess != null ? !startAccess.equals(userDto.startAccess) : userDto.startAccess != null) return false;
-        return roles != null ? roles.equals(userDto.roles) : userDto.roles == null;
-
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserDto other = (UserDto) obj;
+        if (active != other.active)
+            return false;
+        if (degree == null) {
+            if (other.degree != null)
+                return false;
+        } else if (!degree.equals(other.degree))
+            return false;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
+        if (lastname == null) {
+            if (other.lastname != null)
+                return false;
+        } else if (!lastname.equals(other.lastname))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
+        if (salutation == null) {
+            if (other.salutation != null)
+                return false;
+        } else if (!salutation.equals(other.salutation))
+            return false;
+        if (startAccess == null) {
+            if (other.startAccess != null)
+                return false;
+        } else if (!startAccess.equals(other.startAccess))
+            return false;
+        if (surename == null) {
+            if (other.surename != null)
+                return false;
+        } else if (!surename.equals(other.surename))
+            return false;
+        if (telefon == null) {
+            if (other.telefon != null)
+                return false;
+        } else if (!telefon.equals(other.telefon))
+            return false;
+        if (userId == null) {
+            if (other.userId != null)
+                return false;
+        } else if (!userId.equals(other.userId))
+            return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userId != null ? userId.hashCode() : 0;
-        result = 31 * result + degree.hashCode();
-        result = 31 * result + (salutation != null ? salutation.hashCode() : 0);
-        result = 31 * result + (surename != null ? surename.hashCode() : 0);
-        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (telefon != null ? telefon.hashCode() : 0);
-        result = 31 * result + (startAccess != null ? startAccess.hashCode() : 0);
-        result = 31 * result + (roles != null ? roles.hashCode() : 0);
-        result = 31 * result + (active ? 1 : 0);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (active ? 1231 : 1237);
+        result = prime * result + ((degree == null) ? 0 : degree.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((salutation == null) ? 0 : salutation.hashCode());
+        result = prime * result + ((startAccess == null) ? 0 : startAccess.hashCode());
+        result = prime * result + ((surename == null) ? 0 : surename.hashCode());
+        result = prime * result + ((telefon == null) ? 0 : telefon.hashCode());
+        result = prime * result + ((userId == null) ? 0 : userId.hashCode());
         return result;
     }
 
     @Override
     public String toString() {
-        return "UserDto{" +
-                "userId='" + userId + '\'' +
-                ", degree='" + degree + '\'' +
-                ", salutation='" + salutation + '\'' +
-                ", surename='" + surename + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", telefon='" + telefon + '\'' +
-                ", startAccess=" + startAccess +
-                ", roles=" + roles +
-                ", active=" + active +
-                '}';
+        return "UserDto [userId=" + userId + ", degree=" + degree + ", salutation=" + salutation + ", surename="
+                + surename + ", lastname=" + lastname + ", password=" + password + ", email=" + email + ", telefon="
+                + telefon + ", startAccess=" + startAccess + ", active=" + active + "]";
     }
 }
