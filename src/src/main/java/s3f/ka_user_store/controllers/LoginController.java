@@ -56,7 +56,7 @@ public class LoginController {
             @ApiResponse(code=HttpURLConnection.HTTP_UNAUTHORIZED,message="Time to live is run out",response=HttpStatus.class),
             @ApiResponse(code = HttpURLConnection.HTTP_PRECON_FAILED, message = "Dencryptions fails, because the encrypted parameters were not correct.", response = HttpStatus.class),
             @ApiResponse(code = HttpURLConnection.HTTP_FORBIDDEN, message = "Dencryptions fails, because the encrypted value was not correct.", response = HttpStatus.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_CLIENT_TIMEOUT, message = "Dencryptions fails, because the encrypted value was not correct.", response = HttpStatus.class)
+            @ApiResponse(code = HttpURLConnection.HTTP_CLIENT_TIMEOUT, message = "TTL is over.", response = HttpStatus.class)
     })
 
     public ResponseEntity<String> getUserId(@RequestHeader(value = "Authorization") String authorization,
