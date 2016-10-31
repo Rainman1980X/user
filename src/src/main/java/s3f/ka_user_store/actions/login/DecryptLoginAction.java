@@ -37,7 +37,7 @@ public class DecryptLoginAction {
                     DecryptLoginAction.class.getName());
             return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
         }
-        LoggerHelper.logData(Level.INFO, "Create encryption fails", correlationToken, authorization,
+        LoggerHelper.logData(Level.INFO, "Create encryption sucessful", correlationToken, authorization,
                 DecryptLoginAction.class.getName());
         return new ResponseEntity<>(information[DECRYPED_USERID], HttpStatus.OK);
 
