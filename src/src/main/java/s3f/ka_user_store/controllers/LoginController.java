@@ -66,7 +66,7 @@ public class LoginController {
         return (new DecryptLoginAction()).doAction(authorization, correlationToken, encryptedValue);
     }
 
-    @RequestMapping(value = "/jwt/user/{userID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/jwt/user/{userId}", method = RequestMethod.GET)
     @ApiOperation(value = "Create JWT token from UserID", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
