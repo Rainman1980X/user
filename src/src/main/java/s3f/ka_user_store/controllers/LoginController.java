@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import s3f.ka_user_store.actions.login.CreateUserJwtTokenAction;
 import s3f.ka_user_store.actions.login.DecryptLoginAction;
 import s3f.ka_user_store.actions.login.EncryptLoginAction;
 import s3f.ka_user_store.actions.user.GetUserAction;
 import s3f.ka_user_store.dtos.UserDto;
+import s3f.ka_user_store.dtos.UserTokenConfigDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
 import s3f.ka_user_store.interfaces.UserRepository;
 
@@ -34,6 +36,8 @@ public class LoginController {
     private CompanyRepository companyRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private UserTokenConfigDto userTokenConfigDto;
 
     // /login/encrypt/{uuid}
 
@@ -77,6 +81,15 @@ public class LoginController {
         httpsValues.put("userId", userId);
         return (new GetUserAction()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken,
                 httpsValues);
+    }
+
+    @RequestMapping(value = "/jwt/login/jwtGen/{userEmail}/{userPwd}", method = RequestMethod.GET)
+    @ApiOperation(value = "Create JWT token from UserEmail", produces = "text/plain")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Password is correct and JWT generated", response = String.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "User not found, Password not defined or Passwords do not match", response = String.class) })
+    public ResponseEntity<String> getJwtByUserLogin(@RequestHeader("Authorization") String authorization,@RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userEmail") String userEmail,@PathVariable("userPwd") String userPwd) {
+        return (new CreateUserJwtTokenAction().doAction(userRepository, userTokenConfigDto,userEmail,userPwd));
     }
     // /jwt/create-user/{uuid}?company=companyId
 
