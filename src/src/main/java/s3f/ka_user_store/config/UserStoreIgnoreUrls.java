@@ -14,7 +14,7 @@ public class UserStoreIgnoreUrls {
 
     @Autowired
     public UserStoreIgnoreUrls(JWTIgnoreURL filter){
-        filter.addUrlToIgnore("/api/v1/user-store/jwt/login/jwtGen");
+        filter.addUrlToIgnore("/api/v1/user-store/login/jwt");
     }
 
 

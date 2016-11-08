@@ -83,12 +83,12 @@ public class LoginController {
                 httpsValues);
     }
 
-    @RequestMapping(value = "/jwt/login/jwtGen/{userEmail}/{userPwd}", method = RequestMethod.GET)
+    @RequestMapping(value = "/login/jwt/{userEmail}/{userPwd}", method = RequestMethod.GET)
     @ApiOperation(value = "Create JWT token from UserEmail", produces = "text/plain")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Password is correct and JWT generated", response = String.class),
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "User not found, Password not defined or Passwords do not match", response = String.class) })
-    public ResponseEntity<String> getJwtByUserLogin(@RequestHeader("Authorization") String authorization,@RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userEmail") String userEmail,@PathVariable("userPwd") String userPwd) {
+    public ResponseEntity<String> getJwtByUserLogin(@RequestHeader(value = "Authorization",required = false) String authorization,@RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userEmail") String userEmail,@PathVariable("userPwd") String userPwd) {
         return (new CreateUserJwtTokenAction().doAction(userRepository, userTokenConfigDto,userEmail,userPwd));
     }
     // /jwt/create-user/{uuid}?company=companyId
