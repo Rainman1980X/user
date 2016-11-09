@@ -89,7 +89,7 @@ public class CompanyController {
     @RequestMapping(value = "/api/v1/user-store/company/{companyId}", method = RequestMethod.GET)
     @ApiOperation(value = "Get company by companyId.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = CompanyDto.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = UserDto.class) })
     public ResponseEntity<CompanyDto> getCompany(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken,

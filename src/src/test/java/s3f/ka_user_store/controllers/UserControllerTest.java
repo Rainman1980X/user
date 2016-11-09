@@ -4,9 +4,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import s3f.framework.interfaces.ApplicationConstants;
+import s3f.framework.logger.LoggerHelper;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
 
@@ -50,6 +54,37 @@ public class UserControllerTest {
         userController = new UserController();
         userRepository = mock(UserRepository.class);
         ReflectionTestUtils.setField(userController, "userRepository", userRepository);
+        LoggerHelper.setApplicationConstants(new ApplicationConstants() {
+            @Override
+            public String getServiceName() {
+                return "";
+            }
+
+            @Override
+            public String getVersion() {
+                return "";
+            }
+
+            @Override
+            public String getLifecycle() {
+                return "";
+            }
+
+            @Override
+            public URL getConfigServerAddress() {
+                return null;
+            }
+
+            @Override
+            public String getConfigServiceAddress() {
+                return "";
+            }
+
+            @Override
+            public Map<String, String> getConfigServiceArguments() {
+                return null;
+            }
+        });
     }
 
     @Test
