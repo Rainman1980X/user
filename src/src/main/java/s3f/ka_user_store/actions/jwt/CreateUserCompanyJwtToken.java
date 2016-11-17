@@ -1,4 +1,4 @@
-package s3f.ka_user_store.actions.login;
+package s3f.ka_user_store.actions.jwt;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
