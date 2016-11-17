@@ -28,7 +28,7 @@ public class CreateUserAction {
         if (hasDoubleEntry(userDto.getEmail())) {
             LoggerHelper.logData(Level.INFO, "User is duplicate.", correlationToken, authorization,
                     CreateUserAction.class.getName());
-            return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.CONFLICT);
+            return new ResponseEntity<UserDto>(HttpStatus.CONFLICT);
         }
 
         try {
@@ -40,7 +40,7 @@ public class CreateUserAction {
         } catch (Exception e) {
             LoggerHelper.logData(Level.ERROR, "User can't be saved", correlationToken, authorization,
                     CreateUserAction.class.getName());
-            return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<UserDto>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

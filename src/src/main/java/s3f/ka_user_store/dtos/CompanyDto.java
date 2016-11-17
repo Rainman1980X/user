@@ -1,7 +1,5 @@
 package s3f.ka_user_store.dtos;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 
 /**
@@ -16,13 +14,12 @@ public class CompanyDto {
     public String locality;
     public String customerNumber;
     public String vatId; // Umsatzsteuer-Identifikationsnummer
-    public List<UserRoleDto> assignedUserWithRole;
 
     public CompanyDto() {
     }
 
     public CompanyDto(String companyId, String name, String street, String zipcode, String locality,
-            String customerNumber, String vatId, List<UserRoleDto> assignedUserWithRole) {
+            String customerNumber, String vatId) {
         this.companyId = companyId;
         this.name = name;
         this.street = street;
@@ -30,7 +27,6 @@ public class CompanyDto {
         this.locality = locality;
         this.customerNumber = customerNumber;
         this.vatId = vatId;
-        this.assignedUserWithRole = assignedUserWithRole; // create a local copy
     }
 
     public String getCompanyId() {
@@ -61,10 +57,6 @@ public class CompanyDto {
         return vatId;
     }
 
-    public List<UserRoleDto> getAssignedUserWithRole() {
-        return assignedUserWithRole; // While returning create a new List !!
-    }
-
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
@@ -93,10 +85,6 @@ public class CompanyDto {
         this.vatId = vatId;
     }
 
-    public void setAssignedUserWithRole(List<UserRoleDto> assignedUserWithRole) {
-        this.assignedUserWithRole = assignedUserWithRole;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -106,11 +94,6 @@ public class CompanyDto {
         if (getClass() != obj.getClass())
             return false;
         CompanyDto other = (CompanyDto) obj;
-        if (assignedUserWithRole == null) {
-            if (other.assignedUserWithRole != null)
-                return false;
-        } else if (!assignedUserWithRole.equals(other.assignedUserWithRole))
-            return false;
         if (companyId == null) {
             if (other.companyId != null)
                 return false;
@@ -153,7 +136,6 @@ public class CompanyDto {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((assignedUserWithRole == null) ? 0 : assignedUserWithRole.hashCode());
         result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
         result = prime * result + ((customerNumber == null) ? 0 : customerNumber.hashCode());
         result = prime * result + ((locality == null) ? 0 : locality.hashCode());
@@ -167,7 +149,6 @@ public class CompanyDto {
     @Override
     public String toString() {
         return "CompanyDto [companyId=" + companyId + ", name=" + name + ", street=" + street + ", zipcode=" + zipcode
-                + ", locality=" + locality + ", customerNumber=" + customerNumber + ", vatId=" + vatId
-                + ", assignedUserWithRole=" + assignedUserWithRole.toString() + "]";
+                + ", locality=" + locality + ", customerNumber=" + customerNumber + ", vatId=" + vatId + "]";
     }
 }

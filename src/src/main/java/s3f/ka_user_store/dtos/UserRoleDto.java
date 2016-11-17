@@ -2,25 +2,32 @@ package s3f.ka_user_store.dtos;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import s3f.ka_user_store.enumns.UserRoles;
+
 @Document
 public class UserRoleDto {
 
-    private String userId;
-    private String role;
+    private String companyId;
+    private UserRoles role;
 
-    public String getUserId() {
-        return userId;
+    public UserRoleDto(String companyId, UserRoles role) {
+        this.companyId = companyId;
+        this.role = role;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getCompanyId() {
+        return companyId;
     }
 
-    public String getRole() {
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public UserRoles getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRoles role) {
         this.role = role;
     }
 
@@ -28,8 +35,8 @@ public class UserRoleDto {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
         result = prime * result + ((role == null) ? 0 : role.hashCode());
-        result = prime * result + ((userId == null) ? 0 : userId.hashCode());
         return result;
     }
 
@@ -42,22 +49,19 @@ public class UserRoleDto {
         if (getClass() != obj.getClass())
             return false;
         UserRoleDto other = (UserRoleDto) obj;
-        if (role == null) {
-            if (other.role != null)
+        if (companyId == null) {
+            if (other.companyId != null)
                 return false;
-        } else if (!role.equals(other.role))
+        } else if (!companyId.equals(other.companyId))
             return false;
-        if (userId == null) {
-            if (other.userId != null)
-                return false;
-        } else if (!userId.equals(other.userId))
+        if (role != other.role)
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "UserRoleDto [userId=" + userId + ", role=" + role + "]";
+        return "UserRoleDto [companyId=" + companyId + ", roles=" + String.join(",", role.getUserRoleList()) + "]";
     }
 
 }

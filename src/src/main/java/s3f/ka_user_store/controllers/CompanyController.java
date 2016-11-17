@@ -20,15 +20,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import s3f.framework.config.ServletConfig;
-import s3f.ka_user_store.actions.company.ChangeUserCompanyAction;
 import s3f.ka_user_store.actions.company.CreateCompanyAction;
 import s3f.ka_user_store.actions.company.EditCompanyAction;
 import s3f.ka_user_store.actions.company.GetCompanyAction;
 import s3f.ka_user_store.actions.company.GetCompanyListByUserId;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.UserDto;
-import s3f.ka_user_store.dtos.UserRoleDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
+import s3f.ka_user_store.interfaces.UserRepository;
 
 /**
  * Created by MSBurger on 09.09.2016.
@@ -38,6 +37,8 @@ public class CompanyController {
 
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
     private final ServletConfig servletConfig;
@@ -71,21 +72,6 @@ public class CompanyController {
                 correlationToken, companyDto);
     }
 
-    @RequestMapping(value = "/api/v1/user-store/company/{companyId}/{assignedUserList}", method = RequestMethod.POST)
-    @ApiOperation(value = "Change the assigned user", produces = "application/json", consumes = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Assigned user list successful changed", response = HttpStatus.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found.", response = HttpStatus.class),
-            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Assigned user list change fails.", response = HttpStatus.class) })
-    public ResponseEntity<HttpStatus> changeAssigendUser(@RequestHeader(value = "Authorization") String authorization,
-            @RequestHeader(value = "CorrelationToken") String correlationToken,
-            @RequestBody List<UserRoleDto> assignedUserWithRoles,
-            @PathVariable("companyId") String companyId) {
-
-        return (new ChangeUserCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization,
-                correlationToken, companyId, assignedUserWithRoles);
-    }
-
     @RequestMapping(value = "/api/v1/user-store/company/{companyId}", method = RequestMethod.GET)
     @ApiOperation(value = "Get company by companyId.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
@@ -109,6 +95,4 @@ public class CompanyController {
             @PathVariable("userId") String userId) {
         return (new GetCompanyListByUserId()).doAction(mongoTemplate, authorization, correlationToken,userId );
     }
-    
-
 }

@@ -21,15 +21,20 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import s3f.ka_user_store.actions.user.ActivateUserAction;
 import s3f.ka_user_store.actions.user.ChangePasswordAction;
+import s3f.ka_user_store.actions.user.ChangeRoleListAction;
 import s3f.ka_user_store.actions.user.CreateUserAction;
 import s3f.ka_user_store.actions.user.DeactivateUserAction;
 import s3f.ka_user_store.actions.user.EditUserAction;
 import s3f.ka_user_store.actions.user.GetAllUserAction;
-import s3f.ka_user_store.actions.user.GetRoleList;
+import s3f.ka_user_store.actions.user.GetRoleListOfUser;
+import s3f.ka_user_store.actions.user.GetRoleListRaw;
+import s3f.ka_user_store.actions.user.GetRoleListText;
 import s3f.ka_user_store.actions.user.GetUserAction;
 import s3f.ka_user_store.actions.user.GetUserByEmailAction;
 import s3f.ka_user_store.actions.user.GetUserStatus;
 import s3f.ka_user_store.dtos.UserDto;
+import s3f.ka_user_store.dtos.UserRoleDto;
+import s3f.ka_user_store.enumns.UserRoles;
 import s3f.ka_user_store.interfaces.UserRepository;
 
 /**
@@ -79,6 +84,24 @@ public class UserController {
         httpsValues.put("userId", userId);
         httpsValues.put("password", newPassword);
         return (new ChangePasswordAction()).doActionOnUser(userRepository, mongoTemplate, authorization,
+                correlationToken, httpsValues);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/role/{companyId}/{userId}/{roles}", method = RequestMethod.POST)
+    @ApiOperation(value = "Change role of user.", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Role list of the user successful changed", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found.", response = HttpStatus.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Role list change fails.", response = HttpStatus.class) })
+    public ResponseEntity<HttpStatus> changeRole(@RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId,
+            @PathVariable("companyId") String companyId,
+            @PathVariable("roles") List<String> roles) {
+        Map<String, String> httpsValues = new HashMap<>();
+        httpsValues.put("userId", userId);
+        httpsValues.put("companyId", companyId);
+        httpsValues.put("roles", String.join(",", roles));
+        return (new ChangeRoleListAction()).doActionOnUser(userRepository, mongoTemplate, authorization,
                 correlationToken, httpsValues);
     }
 
@@ -142,6 +165,20 @@ public class UserController {
                 httpsValues);
     }
 
+    @RequestMapping(value = "/api/v1/user-store/{userId}/roles", method = RequestMethod.GET)
+    @ApiOperation(value = "Get list of roles from user.", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "List of roles created.", response = List.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found.", response = List.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Role list is empty", response = List.class) })
+    public ResponseEntity<List<UserRoleDto>> getRoleListOfUser(
+            @RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId) {
+        Map<String, String> httpsValues = new HashMap<>();
+        httpsValues.put("userId", userId);
+        return (new GetRoleListOfUser()).doActionOnUser(userRepository, authorization, correlationToken, httpsValues);
+    }
+
     @RequestMapping(value = "/api/v1/user-store/{userId}/status", method = RequestMethod.GET)
     @ApiOperation(value = "Get user status by userID.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
@@ -158,9 +195,20 @@ public class UserController {
     @RequestMapping(value = "/api/v1/user-store/roles", method = RequestMethod.GET)
     @ApiOperation(value = "Get role list.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Get role list. ", response = Boolean.class) })
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Get role list. ", response = List.class) })
     public ResponseEntity<List<String>> getRoleList(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken) {
-        return (new GetRoleList()).doActionOnUser(authorization, correlationToken);
+        return (new GetRoleListText()).doActionOnUser(authorization, correlationToken);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/roles/rawlist", method = RequestMethod.GET)
+    @ApiOperation(value = "Get role list.", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Get role list. ", response = Map.class) })
+
+    public ResponseEntity<Map<String, UserRoles>> getRoleRawList(
+            @RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken) {
+        return (new GetRoleListRaw()).doAction(authorization, correlationToken);
     }
 }

@@ -14,10 +14,10 @@ import s3f.ka_user_store.enumns.UserRoles;
  * Created by MSBurger on 19.09.2016.
  */
 @Service
-public class GetRoleList {
+public class GetRoleListText {
 
     public ResponseEntity<List<String>> doActionOnUser(String authorization, String correlationToken) {
-        LoggerHelper.logData(Level.INFO, "Get role list", correlationToken, authorization, GetRoleList.class.getName());
+        LoggerHelper.logData(Level.INFO, "Get role list", correlationToken, authorization, GetRoleListText.class.getName());
         return new ResponseEntity<List<String>>(UserRoles.getUserRoleList(), HttpStatus.OK);
     }
 }

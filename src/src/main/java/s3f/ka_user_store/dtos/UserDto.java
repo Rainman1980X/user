@@ -21,9 +21,11 @@ public class UserDto {
     public String email; // login
     public String telefon;
     public Date startAccess;
+    public List<UserRoleDto> roles;
     public boolean active;
 
     public UserDto(){
+
     }
 
     public UserDto(String userId,
@@ -35,7 +37,7 @@ public class UserDto {
                    String email,
                    String telefon,
                    Date startAccess,
-                   List<String> roles,
+            List<UserRoleDto> roles,
                    boolean active) {
         this.userId = userId;
         this.degree = degree;
@@ -46,6 +48,7 @@ public class UserDto {
         this.email = email;
         this.telefon = telefon;
         this.startAccess = startAccess;
+        this.roles = roles;
         this.active = active;
     }
 
@@ -83,6 +86,10 @@ public class UserDto {
 
     public Date getStartAccess() {
         return startAccess;
+    }
+
+    public List<UserRoleDto> getRoles() {
+        return roles;
     }
 
     public boolean isActive() {
@@ -125,6 +132,10 @@ public class UserDto {
         this.startAccess = startAccess;
     }
 
+    public void setRoles(List<UserRoleDto> roles) {
+        this.roles = roles;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -159,6 +170,11 @@ public class UserDto {
             if (other.password != null)
                 return false;
         } else if (!password.equals(other.password))
+            return false;
+        if (roles == null) {
+            if (other.roles != null)
+                return false;
+        } else if (!roles.equals(other.roles))
             return false;
         if (salutation == null) {
             if (other.salutation != null)
@@ -197,6 +213,7 @@ public class UserDto {
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((roles == null) ? 0 : roles.hashCode());
         result = prime * result + ((salutation == null) ? 0 : salutation.hashCode());
         result = prime * result + ((startAccess == null) ? 0 : startAccess.hashCode());
         result = prime * result + ((surename == null) ? 0 : surename.hashCode());

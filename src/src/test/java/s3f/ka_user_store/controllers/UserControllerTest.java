@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import s3f.framework.interfaces.ApplicationConstants;
 import s3f.framework.logger.LoggerHelper;
 import s3f.ka_user_store.dtos.UserDto;
+import s3f.ka_user_store.dtos.UserRoleDto;
+import s3f.ka_user_store.enumns.UserRoles;
 import s3f.ka_user_store.interfaces.UserRepository;
 
 
@@ -36,7 +39,9 @@ public class UserControllerTest {
     private UserRepository userRepository;
     private final String authorization = "Authorization";
     private final String correlationToken = "CorrelationToken";
-    private final List<String> roles = Arrays.asList(new String[]{"Admin", "contact"});
+    private final List<UserRoleDto> roles = Arrays
+            .asList(new UserRoleDto[] { new UserRoleDto("1", UserRoles.ADMIN),
+                    new UserRoleDto("31", UserRoles.AUDITOR) });
     private final UserDto userDto = new UserDto(
             "a1",
             "",
@@ -47,7 +52,7 @@ public class UserControllerTest {
             "matthias.burger@sintec.de",
             "09287 / 956 23-200",
             new Date(),
-            roles, true);
+            new ArrayList<>(), true);
 
     @Before
     public void setUp() throws Exception {
