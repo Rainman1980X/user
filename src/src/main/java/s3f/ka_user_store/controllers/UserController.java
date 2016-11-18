@@ -34,7 +34,7 @@ import s3f.ka_user_store.actions.user.GetUserByEmailAction;
 import s3f.ka_user_store.actions.user.GetUserStatus;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.dtos.UserRoleDto;
-import s3f.ka_user_store.enumns.UserRoles;
+import s3f.ka_user_store.enumns.EntryDefiniton;
 import s3f.ka_user_store.interfaces.UserRepository;
 
 /**
@@ -206,7 +206,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Get role list. ", response = Map.class) })
 
-    public ResponseEntity<Map<String, UserRoles>> getRoleRawList(
+    public ResponseEntity<List<EntryDefiniton>> getRoleRawList(
             @RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken) {
         return (new GetRoleListRaw()).doAction(authorization, correlationToken);
