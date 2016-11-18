@@ -40,10 +40,6 @@ public class ChangeRoleListAction {
                 return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
             }
 
-            userDtoTemp.getRoles().forEach(item -> LoggerHelper.logData(Level.INFO, item.getRole().toString(),
-                    correlationToken,
-                    authorization, ChangeRoleListAction.class.getName()));
-
             // ToDo: Pruefung ob Unterliste Role leer ist!!
 
             List<String> roleList = Stream.of(httpValues.get("roles").split(",")).collect(Collectors.toList());
