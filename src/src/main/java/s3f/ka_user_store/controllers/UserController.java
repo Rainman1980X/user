@@ -96,11 +96,11 @@ public class UserController {
     public ResponseEntity<HttpStatus> changeRole(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId,
             @PathVariable("companyId") String companyId,
-            @PathVariable("roles") List<String> roles) {
+            @PathVariable("roles") String roles) {
         Map<String, String> httpsValues = new HashMap<>();
         httpsValues.put("userId", userId);
         httpsValues.put("companyId", companyId);
-        httpsValues.put("roles", String.join(",", roles));
+        httpsValues.put("roles", roles);
         return (new ChangeRoleListAction()).doActionOnUser(userRepository, mongoTemplate, authorization,
                 correlationToken, httpsValues);
     }
