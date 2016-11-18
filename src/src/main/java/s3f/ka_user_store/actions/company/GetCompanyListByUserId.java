@@ -2,7 +2,6 @@ package s3f.ka_user_store.actions.company;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Level;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,11 +27,26 @@ public class GetCompanyListByUserId {
                     GetCompanyListByUserId.class.getName());
         }
 
-        List<String> companyIdList = ((List<UserRoleDto>) userList.stream().map(user -> user.getRoles())).stream()
-                .map(role -> role.getCompanyId()).collect(Collectors.toCollection(ArrayList::new));
+        List<String> companyIdList = new ArrayList<>();
+        for (UserDto user : userList) {
+            try {
+                for (UserRoleDto role : user.getRoles()) {
+                    try {
+                        companyIdList.add(role.getCompanyId());
 
-        List<CompanyDto> companyList = mongoTemplate
-                .find(new Query(Criteria.where("assignedUserWithRole.userId").in(companyIdList)), CompanyDto.class);
+                    } catch (Exception ex) {
+                        LoggerHelper.logData(Level.DEBUG, "No CompanyId set", correlationToken, authorization,
+                                GetCompanyListByUserId.class.getName());
+                    }
+                }
+            } catch (Exception ex) {
+                LoggerHelper.logData(Level.DEBUG, "No role set", correlationToken, authorization,
+                        GetCompanyListByUserId.class.getName());
+            }
+        }
+
+        List<CompanyDto> companyList = mongoTemplate.find(new Query(Criteria.where("companyId").in(companyIdList)),
+                CompanyDto.class);
         if (companyList.isEmpty()) {
             LoggerHelper.logData(Level.WARN, "Company not found", correlationToken, authorization,
                     GetCompanyListByUserId.class.getName());
