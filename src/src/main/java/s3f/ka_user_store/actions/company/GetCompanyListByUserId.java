@@ -50,7 +50,7 @@ public class GetCompanyListByUserId {
         if (companyList.isEmpty()) {
             LoggerHelper.logData(Level.WARN, "Company not found", correlationToken, authorization,
                     GetCompanyListByUserId.class.getName());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity<>(companyList, HttpStatus.OK);
     }
