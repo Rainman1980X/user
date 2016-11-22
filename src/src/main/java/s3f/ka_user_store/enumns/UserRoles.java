@@ -13,7 +13,7 @@ import java.util.Optional;
 public enum UserRoles {
 
     AUDITOR("Prüfer"), CONTRACTOR("Unternehmer"), EMPLOYEE("Angestellte(r) des Unternehmers"), SUPPORTER(
-            "DATEV Support"), ADMIN("SINTEC Administrator"), DEVICE("Kasse(n-System)");
+            "DATEV Support"), ADMIN("Administrator"), DEVICE("Kasse(n-System)"), SYSADMIN("System Administrator");
 
     private static final Map<UserRoles, String> userRoleList = new HashMap<>();
     private static final List<EntryDefiniton> userRoleEntryList = new ArrayList<>();
