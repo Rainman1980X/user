@@ -45,9 +45,7 @@ public class CreateUserJwtTokenAction {
             JWSObject jwsObject = new JWSObject(header, new Payload(new JSONObject(claims)));
             JWSSigner signer = new RSASSASigner(RSAKey.parse(dto.getSecret()));
             jwsObject.sign(signer);
-            //TODO Uncomment ot enable Datev-konform security
-            LoggerHelper.logData(Level.ERROR,"Replace jwt with correct creation for Datev-Auth","","",CreateUserJwtTokenAction.class.toString());
-            return new ResponseEntity<String>("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE0NzU2ODUwOTMsImlzcyI6InMzZiIsImV4cCI6NzI4OTU2NDQwMH0.ST8wpTTjC5nHAHlQUNXoUESi4pEGR1imv_Lv5bds8w8"/*jwsObject.serialize()*/,HttpStatus.OK);
+            return new ResponseEntity<String>(jwsObject.serialize(),HttpStatus.OK);
         } catch (ParseException e) {
             LoggerHelper.logData(Level.ERROR,"Could not parse JwtHeader:"+e.getMessage(),"","",CreateUserJwtTokenAction.class.toString(),e);
         } catch (JOSEException e) {
