@@ -84,7 +84,7 @@ public class LoginController {
                 httpsValues);
     }
 
-    @RequestMapping(value = "/login/jwt/{userEmail}/{userPwd:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/login/jwt/{userEmail}/{userPwd:.+}",produces = "text/plain", method = RequestMethod.GET)
     @ApiOperation(value = "Create JWT token from UserEmail", produces = "text/plain")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Password is correct and JWT generated", response = String.class),
