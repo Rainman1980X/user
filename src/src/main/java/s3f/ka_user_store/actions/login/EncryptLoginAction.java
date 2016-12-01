@@ -6,8 +6,8 @@ import org.apache.log4j.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import s3f.framework.encryption.EncryptionDecryptionService;
 import s3f.framework.logger.LoggerHelper;
-import s3f.framework.security.EncryptionDecryptionService;
 
 public class EncryptLoginAction {
     public ResponseEntity<String> doAction(String authorization, String correlationToken, String userId) {

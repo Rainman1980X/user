@@ -1,8 +1,7 @@
 package s3f.ka_user_store.controllers;
+import org.junit.Test;
 
 import static org.junit.Assert.fail;
-
-import org.junit.Test;
 
 /**
  * Created by MSBurger on 16.09.2016.

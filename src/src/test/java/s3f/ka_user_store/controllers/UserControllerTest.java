@@ -59,37 +59,7 @@ public class UserControllerTest {
         userController = new UserController();
         userRepository = mock(UserRepository.class);
         ReflectionTestUtils.setField(userController, "userRepository", userRepository);
-        LoggerHelper.setApplicationConstants(new ApplicationConstants() {
-            @Override
-            public String getServiceName() {
-                return "";
-            }
-
-            @Override
-            public String getVersion() {
-                return "";
-            }
-
-            @Override
-            public String getLifecycle() {
-                return "";
-            }
-
-            @Override
-            public URL getConfigServerAddress() {
-                return null;
-            }
-
-            @Override
-            public String getConfigServiceAddress() {
-                return "";
-            }
-
-            @Override
-            public Map<String, String> getConfigServiceArguments() {
-                return null;
-            }
-        });
+        LoggerHelper.initialize("","");
     }
 
     @Test

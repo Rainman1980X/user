@@ -2,7 +2,7 @@ package s3f.ka_user_store.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import s3f.framework.jwt.web.config.JWTIgnoreURL;
+import s3f.framework.authorization.jwt.web.config.JWTIgnoreURL;
 
 import javax.annotation.PostConstruct;
 

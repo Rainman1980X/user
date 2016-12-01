@@ -17,101 +17,127 @@
 	</parent>
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>base</artifactId>
+			<version>[1.0.0,2.0.0)</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>authorization.jwt</artifactId>
+			<version>[1.0.0,2.0.0)</version>
 		</dependency>
-
-
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j</artifactId>
-			<version>1.3.7.RELEASE</version>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>mongo-config</artifactId>
+			<version>[1.0.0,2.0.0)</version>
 		</dependency>
-
-
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>encryption</artifactId>
+			<version>[1.0.0,2.0.0)</version>
 		</dependency>
-
+		<dependency>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>collections</artifactId>
+			<version>[1.0.0,2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>gsonSerializer</artifactId>
+			<version>[1.0.0,2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>swagger</artifactId>
+			<version>[1.0.0,2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>logging</artifactId>
+			<version>[1.0.0,2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>sintec.s3f.component</groupId>
+			<artifactId>security</artifactId>
+			<version>[1.0.0,2.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>4.3.2.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.5.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.5.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>sintec.s3f</groupId>
-			<artifactId>shared-lib</artifactId>
-			<version>1.3.129</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>
-				spring-boot-starter-cloud-connectors
-			</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.13</version>
-		</dependency>
+		<!--<dependency><groupId>datev.kassenarchiv</groupId><artifactId>permissionResolver</artifactId><VERSION>1.0</VERSION></dependency>-->
 	</dependencies>
-
 	<properties>
 		<start-class>s3f.Application</start-class>
 		<java.version>1.8</java.version>
 		<swagger-version>1.5.5</swagger-version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-
-
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<!-- DISABLE ALL VERSIONS OF THIS PLUGIN -->
+				<!-- <version>2.8.2</version>-->
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.5.1</version>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<serverId>nexus</serverId>
+					<nexusUrl>https://repository.sintec.de/nexus/</nexusUrl>
+					<skipStaging>true</skipStaging>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>microservices-develop</id>
+			<url>https://repository.sintec.de/nexus/repository/maven-datev-ka-microservices-develop/</url>
+		</repository>
+	</distributionManagement>
 </project>
