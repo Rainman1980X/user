@@ -19,7 +19,21 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import s3f.ka_user_store.actions.user.*;
+import s3f.ka_user_store.actions.user.ActivateUserAction;
+import s3f.ka_user_store.actions.user.ChangePasswordAction;
+import s3f.ka_user_store.actions.user.ChangeRoleListAction;
+import s3f.ka_user_store.actions.user.CreateUserAction;
+import s3f.ka_user_store.actions.user.DeactivateUserAction;
+import s3f.ka_user_store.actions.user.EditUserAction;
+import s3f.ka_user_store.actions.user.GetAllUserAction;
+import s3f.ka_user_store.actions.user.GetRoleListOfUser;
+import s3f.ka_user_store.actions.user.GetRoleListRaw;
+import s3f.ka_user_store.actions.user.GetRoleListText;
+import s3f.ka_user_store.actions.user.GetUserAction;
+import s3f.ka_user_store.actions.user.GetUserByEmailAction;
+import s3f.ka_user_store.actions.user.GetUserByJWT;
+import s3f.ka_user_store.actions.user.GetUserListByCompanyId;
+import s3f.ka_user_store.actions.user.GetUserStatus;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.dtos.UserRoleDto;
 import s3f.ka_user_store.enumns.EntryDefiniton;
@@ -83,8 +97,7 @@ public class UserController {
             @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Role list change fails.", response = HttpStatus.class) })
     public ResponseEntity<HttpStatus> changeRole(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId,
-            @PathVariable("companyId") String companyId,
-            @PathVariable("roles") String roles) {
+            @PathVariable("companyId") String companyId, @PathVariable("roles") String roles) {
         Map<String, String> httpsValues = new HashMap<>();
         httpsValues.put("userId", userId);
         httpsValues.put("companyId", companyId);
@@ -147,7 +160,7 @@ public class UserController {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class) })
     public ResponseEntity<UserDto> getUserByJWT(@RequestHeader(value = "Authorization") String authorization,
-                                                  @RequestHeader(value = "CorrelationToken") String correlationToken) {
+            @RequestHeader(value = "CorrelationToken") String correlationToken) {
         return (new GetUserByJWT()).doAction(userRepository, authorization, correlationToken);
     }
 
@@ -161,6 +174,18 @@ public class UserController {
         Map<String, String> httpsValues = new HashMap<>();
         return (new GetAllUserAction()).doActionOnUser(userRepository, mongoTemplate, authorization, correlationToken,
                 httpsValues);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/user/list/{companyId}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get user list.", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Users found", response = List.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Users not found", response = List.class) })
+    public ResponseEntity<List<UserDto>> GetUserListByCompanyId(
+            @RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken,
+            @PathVariable("companyId") String companyId) {
+        return (new GetUserListByCompanyId()).doAction(mongoTemplate, authorization, correlationToken, companyId);
     }
 
     @RequestMapping(value = "/api/v1/user-store/{userId}/roles", method = RequestMethod.GET)
