@@ -20,7 +20,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import s3f.framework.config.ServletConfig;
-import s3f.ka_user_store.actions.company.CreateCompanyAction;
 import s3f.ka_user_store.actions.company.EditCompanyAction;
 import s3f.ka_user_store.actions.company.GetCompanyAction;
 import s3f.ka_user_store.actions.company.GetCompanyListByUserId;
@@ -44,6 +43,9 @@ public class CompanyController {
     private final ServletConfig servletConfig;
 
     @Autowired
+    private CreateCompanyController createCompanyController;
+
+    @Autowired
     public CompanyController(ServletConfig servletConfig) {
         this.servletConfig = servletConfig;
     }
@@ -56,8 +58,7 @@ public class CompanyController {
             @ApiResponse(code = HttpURLConnection.HTTP_INTERNAL_ERROR, message = "Company can't be saved.", response = CompanyDto.class) })
     public ResponseEntity<CompanyDto> create(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken, @RequestBody CompanyDto companyDto) {
-        return (new CreateCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization,
-                correlationToken, companyDto);
+        return createCompanyController.createCompany(authorization, correlationToken, companyDto);
     }
 
     @RequestMapping(value = "/api/v1/user-store/company/{companyId}", method = RequestMethod.POST)
@@ -85,14 +86,15 @@ public class CompanyController {
         return (new GetCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization,
                 correlationToken, httpsValues);
     }
+
     @RequestMapping(value = "/api/v1/user-store/company/list/{userId}", method = RequestMethod.GET)
     @ApiOperation(value = "Get company by userId.", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = CompanyDto.class),
             @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = CompanyDto.class) })
-    public ResponseEntity< List<CompanyDto>> getCompanyByUserId(@RequestHeader(value = "Authorization") String authorization,
-            @RequestHeader(value = "CorrelationToken") String correlationToken,
-            @PathVariable("userId") String userId) {
-        return (new GetCompanyListByUserId()).doAction(mongoTemplate, authorization, correlationToken,userId );
+    public ResponseEntity<List<CompanyDto>> getCompanyByUserId(
+            @RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId) {
+        return (new GetCompanyListByUserId()).doAction(mongoTemplate, authorization, correlationToken, userId);
     }
 }

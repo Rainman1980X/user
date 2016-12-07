@@ -3,7 +3,6 @@ package s3f.ka_user_store.actions.company;
 import java.util.UUID;
 
 import org.apache.log4j.Level;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,8 @@ public class CreateCompanyAction {
 
     private CompanyRepository companyRepository;
 
-    public ResponseEntity<CompanyDto> doActionOnCompany(CompanyRepository companyRepository,
-            MongoTemplate mongoTemplate, String authorization, String correlationToken, CompanyDto companyDto) {
+    public ResponseEntity<CompanyDto> doAction(CompanyRepository companyRepository, String authorization,
+            String correlationToken, CompanyDto companyDto) {
         this.companyRepository = companyRepository;
         LoggerHelper.logData(Level.INFO, "Create company", correlationToken, authorization,
                 CreateCompanyAction.class.getName());
