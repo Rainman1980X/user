@@ -19,19 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import s3f.ka_user_store.actions.user.ActivateUserAction;
-import s3f.ka_user_store.actions.user.ChangePasswordAction;
-import s3f.ka_user_store.actions.user.ChangeRoleListAction;
-import s3f.ka_user_store.actions.user.CreateUserAction;
-import s3f.ka_user_store.actions.user.DeactivateUserAction;
-import s3f.ka_user_store.actions.user.EditUserAction;
-import s3f.ka_user_store.actions.user.GetAllUserAction;
-import s3f.ka_user_store.actions.user.GetRoleListOfUser;
-import s3f.ka_user_store.actions.user.GetRoleListRaw;
-import s3f.ka_user_store.actions.user.GetRoleListText;
-import s3f.ka_user_store.actions.user.GetUserAction;
-import s3f.ka_user_store.actions.user.GetUserByEmailAction;
-import s3f.ka_user_store.actions.user.GetUserStatus;
+import s3f.ka_user_store.actions.user.*;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.dtos.UserRoleDto;
 import s3f.ka_user_store.enumns.EntryDefiniton;
@@ -151,6 +139,16 @@ public class UserController {
     public ResponseEntity<UserDto> getUserByEmail(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("email") String email) {
         return (new GetUserByEmailAction()).doActionOnUser(userRepository, authorization, correlationToken, email);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/user/me", method = RequestMethod.GET)
+    @ApiOperation(value = "Get user based on JWT-Token.", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "User found", response = UserDto.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "User not found", response = UserDto.class) })
+    public ResponseEntity<UserDto> getUserByJWT(@RequestHeader(value = "Authorization") String authorization,
+                                                  @RequestHeader(value = "CorrelationToken") String correlationToken) {
+        return (new GetUserByJWT()).doAction(userRepository, authorization, correlationToken);
     }
 
     @RequestMapping(value = "/api/v1/user-store/user/list", method = RequestMethod.GET)
