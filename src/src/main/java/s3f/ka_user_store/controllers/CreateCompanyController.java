@@ -10,7 +10,6 @@ import s3f.framework.rest.RestCallBuilder;
 import s3f.ka_user_store.actions.company.CreateCompanyAction;
 import s3f.ka_user_store.actions.company.CreateCompanyLDAPAction;
 import s3f.ka_user_store.dtos.CompanyDto;
-import s3f.ka_user_store.dtos.CompanyLDAPDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
 
 @Service
@@ -40,13 +39,9 @@ public class CreateCompanyController {
 
     private CompanyDto companyDto;
 
-    public CreateCompanyController() {
-        // Empty default constructor
-    }
-
-    private ResponseEntity<CompanyLDAPDto> createLDAPCompany() {
-        return new CreateCompanyLDAPAction().doAction(restCallBuilder, directRestCallBuilder, authorization,
-                correlationToken, user, password, serviceGatewayHost);
+    private ResponseEntity<CompanyDto> createLDAPCompany(CompanyDto companyDto2) {
+        return new CreateCompanyLDAPAction().doAction(restCallBuilder, authorization,
+                correlationToken, user, password, serviceGatewayHost, companyDto2);
 
     }
 
@@ -58,7 +53,7 @@ public class CreateCompanyController {
             CompanyDto companyDto) {
         this.authorization = authorization;
         this.correlationToken = correlationToken;
-        this.companyDto = companyDto;
+        this.companyDto = createLDAPCompany(companyDto).getBody();
         return createMonoDBCompany();
     }
 

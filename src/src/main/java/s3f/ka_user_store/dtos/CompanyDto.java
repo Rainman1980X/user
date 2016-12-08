@@ -1,5 +1,8 @@
 package s3f.ka_user_store.dtos;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -7,13 +10,14 @@ import org.springframework.data.annotation.Id;
  */
 public class CompanyDto {
     @Id
-    public String companyId;
-    public String name;
-    public String street;
-    public String zipcode;
-    public String locality;
-    public String customerNumber;
-    public String vatId; // Umsatzsteuer-Identifikationsnummer
+    private String companyId;
+    private String tenantId;
+    private String name;
+    private String street;
+    private String zipcode;
+    private String locality;
+    private String customerNumber;
+    private String vatId; // Umsatzsteuer-Identifikationsnummer
 
     public CompanyDto() {
     }
@@ -31,6 +35,10 @@ public class CompanyDto {
 
     public String getCompanyId() {
         return companyId;
+    }
+
+    public String getTenantId() {
+        return tenantId;
     }
 
     public String getName() {
@@ -61,6 +69,10 @@ public class CompanyDto {
         this.companyId = companyId;
     }
 
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -86,69 +98,18 @@ public class CompanyDto {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CompanyDto other = (CompanyDto) obj;
-        if (companyId == null) {
-            if (other.companyId != null)
-                return false;
-        } else if (!companyId.equals(other.companyId))
-            return false;
-        if (customerNumber == null) {
-            if (other.customerNumber != null)
-                return false;
-        } else if (!customerNumber.equals(other.customerNumber))
-            return false;
-        if (locality == null) {
-            if (other.locality != null)
-                return false;
-        } else if (!locality.equals(other.locality))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (street == null) {
-            if (other.street != null)
-                return false;
-        } else if (!street.equals(other.street))
-            return false;
-        if (vatId == null) {
-            if (other.vatId != null)
-                return false;
-        } else if (!vatId.equals(other.vatId))
-            return false;
-        if (zipcode == null) {
-            if (other.zipcode != null)
-                return false;
-        } else if (!zipcode.equals(other.zipcode))
-            return false;
-        return true;
-    }
-
-    @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
-        result = prime * result + ((customerNumber == null) ? 0 : customerNumber.hashCode());
-        result = prime * result + ((locality == null) ? 0 : locality.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((street == null) ? 0 : street.hashCode());
-        result = prime * result + ((vatId == null) ? 0 : vatId.hashCode());
-        result = prime * result + ((zipcode == null) ? 0 : zipcode.hashCode());
-        return result;
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return "CompanyDto [companyId=" + companyId + ", name=" + name + ", street=" + street + ", zipcode=" + zipcode
-                + ", locality=" + locality + ", customerNumber=" + customerNumber + ", vatId=" + vatId + "]";
+        return ToStringBuilder.reflectionToString(this);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
 }
