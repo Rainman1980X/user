@@ -23,6 +23,7 @@ import s3f.framework.config.ServletConfig;
 import s3f.ka_user_store.actions.company.EditCompanyAction;
 import s3f.ka_user_store.actions.company.GetCompanyAction;
 import s3f.ka_user_store.actions.company.GetCompanyListByUserId;
+import s3f.ka_user_store.actions.company.GetTenantIdByIdAction;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.CompanyRepository;
@@ -85,6 +86,19 @@ public class CompanyController {
         httpsValues.put("companyId", companyId);
         return (new GetCompanyAction()).doActionOnCompany(companyRepository, mongoTemplate, authorization,
                 correlationToken, httpsValues);
+    }
+
+    @RequestMapping(value = "/api/v1/user-store/company/tenant/{companyId}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get tenantid by companyId.", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Company found", response = String.class),
+            @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "Company not found", response = String.class) })
+    public ResponseEntity<String> getTenantIdById(@RequestHeader(value = "Authorization") String authorization,
+            @RequestHeader(value = "CorrelationToken") String correlationToken,
+            @PathVariable("companyId") String companyId) {
+
+        return (new GetTenantIdByIdAction()).doAction(companyRepository, authorization, correlationToken,
+                companyId);
     }
 
     @RequestMapping(value = "/api/v1/user-store/company/list/{userId}", method = RequestMethod.GET)
