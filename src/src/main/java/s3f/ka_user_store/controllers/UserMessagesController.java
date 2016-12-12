@@ -14,7 +14,6 @@ import s3f.framework.lifecycle.LifeCycle;
 import s3f.framework.logger.LoggerHelper;
 import s3f.framework.messaging.amqp.dto.RabbitMQContainer;
 import s3f.framework.messaging.amqp.job.configuration.JobChannelConfiguration;
-import s3f.framework.messaging.amqp.notification.configuration.NotificationChannelConfiguration;
 import s3f.framework.rest.RestCallBuilder;
 import s3f.framework.serialization.S3FSerializer;
 import s3f.ka_user_store.events.CreateLDAPUserEventHandler;
@@ -38,7 +37,6 @@ public class UserMessagesController {
     private RestCallBuilder restCallBuilder;
 
     private RabbitMQContainer jobContainer;
-    private RabbitMQContainer notificationContainer;
 
     private S3FDeseserializer s3fDeseserializer;
 
@@ -46,7 +44,7 @@ public class UserMessagesController {
 
     @Autowired
     public UserMessagesController(JobChannelConfiguration jobChannelConfiguration,
-            NotificationChannelConfiguration notificationChannelConfiguration, S3FDeseserializer s3fDeseserializer,
+            S3FDeseserializer s3fDeseserializer,
             S3FSerializer s3fSerializer, LifeCycle lifeCycle)
             throws RuntimeException {
         this.s3fDeseserializer = s3fDeseserializer;
@@ -56,14 +54,6 @@ public class UserMessagesController {
         } catch (Exception e) {
             LoggerHelper.logData(Level.ERROR, "Can't build RabbitMQ job container", "LDAPuser", "LDAPuserAuth",
                     UserMessagesController.class.getName(), e);
-            throw new RuntimeException("Can't build RabbitMQ container", e);
-        }
-
-        try {
-            notificationContainer = notificationChannelConfiguration.build(lifeCycle.getKey());
-        } catch (Exception e) {
-            LoggerHelper.logData(Level.ERROR, "Can't build RabbitMQ  notification container", "Deployment",
-                    "DeploymentAuth", UserMessagesController.class.getName(), e);
             throw new RuntimeException("Can't build RabbitMQ container", e);
         }
     }
