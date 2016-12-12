@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import s3f.framework.rest.DirectRestCallBuilder;
-import s3f.framework.rest.RestCallBuilder;
 import s3f.ka_user_store.actions.company.CreateCompanyAction;
 import s3f.ka_user_store.actions.company.CreateCompanyLDAPAction;
 import s3f.ka_user_store.dtos.CompanyDto;
@@ -19,10 +18,7 @@ public class CreateCompanyController {
     private CompanyRepository companyRepository;
 
     @Autowired
-    private RestCallBuilder restCallBuilder;
-
-    @Autowired
-    private DirectRestCallBuilder directRestCallBuilder;
+    private DirectRestCallBuilder restCallBuilder;
 
     @Value("${datev.servicegateway.user}")
     private String user;

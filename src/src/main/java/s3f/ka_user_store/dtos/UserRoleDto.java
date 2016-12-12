@@ -1,5 +1,8 @@
 package s3f.ka_user_store.dtos;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import s3f.ka_user_store.enumns.UserRoles;
@@ -33,35 +36,16 @@ public class UserRoleDto {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
-        result = prime * result + ((role == null) ? 0 : role.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        UserRoleDto other = (UserRoleDto) obj;
-        if (companyId == null) {
-            if (other.companyId != null)
-                return false;
-        } else if (!companyId.equals(other.companyId))
-            return false;
-        if (role != other.role)
-            return false;
-        return true;
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return "UserRoleDto [companyId=" + companyId + ", roles=" + String.join(",", role.getUserRoleList()) + "]";
+        return ToStringBuilder.reflectionToString(this);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
 }

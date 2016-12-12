@@ -9,10 +9,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import s3f.framework.logger.LoggerHelper;
 import s3f.ka_user_store.dtos.UserDto;
 
+@Service
 public class GetUserListByCompanyId {
 
     public ResponseEntity<List<UserDto>> doAction(MongoTemplate mongoTemplate,
