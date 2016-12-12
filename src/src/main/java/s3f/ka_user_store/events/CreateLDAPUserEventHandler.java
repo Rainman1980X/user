@@ -18,7 +18,7 @@ import s3f.framework.deserialization.S3FDeseserializer;
 import s3f.framework.events.S3FEvent;
 import s3f.framework.logger.LoggerHelper;
 import s3f.framework.messaging.amqp.dto.RabbitMQContainer;
-import s3f.framework.rest.RestCallBuilder;
+import s3f.framework.rest.DirectRestCallBuilder;
 import s3f.framework.rest.interfaces.RestCallPost;
 import s3f.framework.serialization.S3FSerializer;
 import s3f.ka_user_store.dtos.MappingConverter;
@@ -29,7 +29,7 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
 
     private SecureRandom random = new SecureRandom();
     private String domainRouting;
-    private RestCallBuilder restCallBuilder;
+    private DirectRestCallBuilder restCallBuilder;
     private RabbitMQContainer container;
     private UserDto userDto;
     private S3FDeseserializer s3fDeseserializer;
@@ -38,7 +38,7 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
     private String password;
     private String serviceGatewayHost;
 
-    public CreateLDAPUserEventHandler(RestCallBuilder restCallBuilder, RabbitMQContainer container,
+    public CreateLDAPUserEventHandler(DirectRestCallBuilder restCallBuilder, RabbitMQContainer container,
             String domainRouting, S3FDeseserializer s3fDeseserializer, S3FSerializer s3fSerializer, String user,
             String password, String serviceGatewayHost) {
         super(container.getChannel());

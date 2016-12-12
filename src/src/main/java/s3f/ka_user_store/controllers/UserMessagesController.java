@@ -14,7 +14,7 @@ import s3f.framework.lifecycle.LifeCycle;
 import s3f.framework.logger.LoggerHelper;
 import s3f.framework.messaging.amqp.dto.RabbitMQContainer;
 import s3f.framework.messaging.amqp.job.configuration.JobChannelConfiguration;
-import s3f.framework.rest.RestCallBuilder;
+import s3f.framework.rest.DirectRestCallBuilder;
 import s3f.framework.serialization.S3FSerializer;
 import s3f.ka_user_store.events.CreateLDAPUserEventHandler;
 
@@ -34,7 +34,7 @@ public class UserMessagesController {
     private String serviceGatewayHost;
 
     @Autowired
-    private RestCallBuilder restCallBuilder;
+    private DirectRestCallBuilder restCallBuilder;
 
     private RabbitMQContainer jobContainer;
 
