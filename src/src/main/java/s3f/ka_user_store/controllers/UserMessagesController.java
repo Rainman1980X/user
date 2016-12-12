@@ -17,6 +17,7 @@ import s3f.framework.messaging.amqp.job.configuration.JobChannelConfiguration;
 import s3f.framework.rest.DirectRestCallBuilder;
 import s3f.framework.serialization.S3FSerializer;
 import s3f.ka_user_store.events.CreateLDAPUserEventHandler;
+import s3f.ka_user_store.interfaces.UserRepository;
 
 @Service
 public class UserMessagesController {
@@ -35,6 +36,10 @@ public class UserMessagesController {
 
     @Autowired
     private DirectRestCallBuilder restCallBuilder;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     private RabbitMQContainer jobContainer;
 
@@ -63,7 +68,7 @@ public class UserMessagesController {
         CreateLDAPUserEventHandler createLDAPUserEventHandler = new CreateLDAPUserEventHandler(restCallBuilder,
                 jobContainer,
                 domainRouting,
-                s3fDeseserializer, s3fSerializer, user, password, serviceGatewayHost);
+                s3fDeseserializer, s3fSerializer, user, password, serviceGatewayHost,userRepository);
 
         jobContainer.getChannel().queueBind(jobContainer.getQueue(), jobContainer.getExchange(), domainRouting + ".*");
         jobContainer.getChannel().basicConsume(jobContainer.getQueue(), false, domainRouting + ".*",

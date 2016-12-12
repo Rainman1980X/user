@@ -21,9 +21,11 @@ import s3f.framework.messaging.amqp.dto.RabbitMQContainer;
 import s3f.framework.rest.DirectRestCallBuilder;
 import s3f.framework.rest.interfaces.RestCallPost;
 import s3f.framework.serialization.S3FSerializer;
+import s3f.ka_user_store.actions.user.CreateUserAction;
 import s3f.ka_user_store.dtos.MappingConverter;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.dtos.UserLDAPDto;
+import s3f.ka_user_store.interfaces.UserRepository;
 
 public class CreateLDAPUserEventHandler extends DefaultConsumer {
 
@@ -37,10 +39,11 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
     private String user;
     private String password;
     private String serviceGatewayHost;
+    private UserRepository userRepository;
 
     public CreateLDAPUserEventHandler(DirectRestCallBuilder restCallBuilder, RabbitMQContainer container,
-            String domainRouting, S3FDeseserializer s3fDeseserializer, S3FSerializer s3fSerializer, String user,
-            String password, String serviceGatewayHost) {
+                                      String domainRouting, S3FDeseserializer s3fDeseserializer, S3FSerializer s3fSerializer, String user,
+                                      String password, String serviceGatewayHost, UserRepository userRepository) {
         super(container.getChannel());
         this.restCallBuilder = restCallBuilder;
         this.container = container;
@@ -50,6 +53,7 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
         this.user = user;
         this.password = password;
         this.serviceGatewayHost = serviceGatewayHost;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -59,8 +63,9 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
         if (envelope.getRoutingKey().equals(domainRouting + ".createUser")) {
             long deliveryTag = envelope.getDeliveryTag();
             try {
-                eventParser(body);
+                S3FEvent event = eventParser(body);
                 createLDAPEntry();
+                (new CreateUserAction()).doActionOnUser(userRepository, null, event.getAuthorization(), event.getCorrelationId(), userDto);
             } catch (Exception e) {
                 LoggerHelper.logData(Level.ERROR, "Handle Event fails", "Rabbit", "RabbitAuth",
                         this.getClass().getName(), e);
@@ -74,12 +79,13 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
         }
     }
 
-    private void eventParser(byte[] body) throws IOException {
+    private S3FEvent eventParser(byte[] body) throws IOException {
 
         S3FEvent event = s3fDeseserializer.deserialize(new String(body, Charset.defaultCharset()), S3FEvent.class);
         userDto = s3fDeseserializer.deserialize(s3fSerializer.toJson(event.getData()), UserDto.class);
         LoggerHelper.logData(Level.DEBUG, "Parse body " + userDto.toString(), "Rabbit", "RabbitAuth",
                 this.getClass().getName());
+        return event;
     }
 
     private void createLDAPEntry() throws Exception {
