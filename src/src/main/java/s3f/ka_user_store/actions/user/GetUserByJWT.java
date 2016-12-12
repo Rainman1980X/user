@@ -1,18 +1,22 @@
 package s3f.ka_user_store.actions.user;
 
+import java.text.ParseException;
+
 import org.apache.log4j.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import s3f.framework.authorization.jwt.utility.JWTParserUtility;
 import s3f.framework.logger.LoggerHelper;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.interfaces.UserRepository;
 
-import java.text.ParseException;
-
 /**
  * Created by snbuchho on 07.12.2016.
  */
+
+@Service
 public class GetUserByJWT {
 
     public ResponseEntity<UserDto> doAction(UserRepository userRepository, String authorization,

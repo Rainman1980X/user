@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Base64Utils;
 
 import s3f.framework.logger.LoggerHelper;
-import s3f.framework.rest.RestCallBuilder;
+import s3f.framework.rest.DirectRestCallBuilder;
 import s3f.framework.rest.interfaces.RestCallPost;
 import s3f.ka_user_store.dtos.CompanyDto;
 import s3f.ka_user_store.dtos.CompanyLDAPDto;
@@ -21,14 +21,14 @@ import s3f.ka_user_store.dtos.MappingConverter;
 
 public class CreateCompanyLDAPAction {
 
-    private RestCallBuilder restCallBuilder;
+    private DirectRestCallBuilder restCallBuilder;
     private String user;
     private String password;
     private String serviceGatewayHost;
     private CompanyDto companyDto;
     private SecureRandom random = new SecureRandom();
 
-    public ResponseEntity<CompanyDto> doAction(RestCallBuilder restCallBuilder, String authorization,
+    public ResponseEntity<CompanyDto> doAction(DirectRestCallBuilder restCallBuilder, String authorization,
             String correlationToken, String user, String password, String serviceGatewayHost, CompanyDto companyDto) {
         this.restCallBuilder = restCallBuilder;
         this.user = user;
@@ -58,9 +58,9 @@ public class CreateCompanyLDAPAction {
 
         RestCallPost<CompanyLDAPDto, CompanyLDAPDto> restCallPost = restCallBuilder.buildPost(serviceGatewayHost, null,
                 "/iam-integration/v1/tenants", headers, uri, CompanyLDAPDto.class,
-                MappingConverter.converter(companyDto2));
+                MappingConverter.convert(companyDto2));
         ResponseEntity<CompanyLDAPDto> response = restCallPost.execute();
-        return MappingConverter.converter(response.getBody());
+        return MappingConverter.convert(response.getBody());
 
     }
 
