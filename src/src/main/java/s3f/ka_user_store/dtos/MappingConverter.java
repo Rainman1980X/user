@@ -33,7 +33,7 @@ public final class MappingConverter {
     public final static UserLDAPDto convert(final UserDto userDto) {
         UserLDAPDto userLDAPDto = new UserLDAPDto();
         userLDAPDto.setEmail(userDto.getEmail());
-        userLDAPDto.setGiven_name(userDto.getSurename());
+        userLDAPDto.setGiven_name(userDto.getGivenName());
         userLDAPDto.setFamily_name(userDto.getLastname());
         userLDAPDto.setPassword(userDto.getPassword());
         userLDAPDto.setDisplay_name(userLDAPDto.getFamily_name()+", "+userLDAPDto.getGiven_name());

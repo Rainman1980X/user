@@ -18,7 +18,7 @@ public class UserDto {
     private String userId;
     private String degree;
     private String salutation;
-    private String surename;
+    private String givenName;
     private String lastname;
     private String password; // it is a hashvalue!!
     private String email; // login
@@ -34,7 +34,7 @@ public class UserDto {
     public UserDto(String userId,
                    String degree,
                    String salutation,
-                   String surename,
+                   String givenName,
                    String lastname,
                    String password,
                    String email,
@@ -45,7 +45,7 @@ public class UserDto {
         this.userId = userId;
         this.degree = degree;
         this.salutation = salutation;
-        this.surename = surename;
+        this.givenName = givenName;
         this.lastname = lastname;
         this.password = password;
         this.email = email;
@@ -67,8 +67,8 @@ public class UserDto {
         return salutation;
     }
 
-    public String getSurename() {
-        return surename;
+    public String getGivenName() {
+        return givenName;
     }
 
     public String getLastname() {
@@ -111,8 +111,8 @@ public class UserDto {
         this.salutation = salutation;
     }
 
-    public void setSurename(String surename) {
-        this.surename = surename;
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
     }
 
     public void setLastname(String lastname) {
