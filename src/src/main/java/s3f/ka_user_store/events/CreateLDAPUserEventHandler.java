@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Level;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Base64Utils;
 
 import com.rabbitmq.client.AMQP;
@@ -98,7 +99,8 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
 
         RestCallPost<UserLDAPDto, UserLDAPDto> restCallPost = restCallBuilder.buildPost(serviceGatewayHost, null,
                 "/iam-integration/v1/persons", headers, uri, UserLDAPDto.class, MappingConverter.convert(userDto));
-        restCallPost.execute();
+        ResponseEntity<UserLDAPDto> responseEntity = restCallPost.execute();
+        userDto.setUserId(responseEntity.getBody().getAccount_uuid());
     }
 
     private String nextSessionId() {

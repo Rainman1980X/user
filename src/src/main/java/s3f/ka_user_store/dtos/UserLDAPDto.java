@@ -16,6 +16,15 @@ public class UserLDAPDto {
     private Date email_verified_on = new Date();
     private List<String> linked_identities = new ArrayList<>();
     private String password;
+    private String account_uuid;
+
+    public String getAccount_uuid() {
+        return account_uuid;
+    }
+
+    public void setAccount_uuid(String account_uuid) {
+        this.account_uuid = account_uuid;
+    }
 
     public String getGiven_name() {
         return given_name;
