@@ -32,7 +32,9 @@ public class CreateUserAction {
         }
 
         try {
-            userDto.setUserId(UUID.randomUUID().toString());
+            if(userDto.getUserId()==null||userDto.getUserId().isEmpty()) {
+                userDto.setUserId(UUID.randomUUID().toString());
+            }
             UserDto newUserDto = this.userRepository.save(userDto);
             LoggerHelper.logData(Level.INFO, "User successful created", correlationToken, authorization,
                     CreateUserAction.class.getName());

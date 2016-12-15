@@ -26,7 +26,7 @@ public final class MappingConverter {
         companyDto.setZipcode(companyLDAPDto.getPostal_code());
         companyDto.setStreet(companyLDAPDto.getStreet());
         companyDto.setVatId(companyLDAPDto.getVat_id());
-        companyDto.setTenantId(companyLDAPDto.getTenant_id());
+        companyDto.setTenantId(companyLDAPDto.getTenant_uuid());
         return companyDto;
     }
 
@@ -36,6 +36,7 @@ public final class MappingConverter {
         userLDAPDto.setGiven_name(userDto.getSurename());
         userLDAPDto.setFamily_name(userDto.getLastname());
         userLDAPDto.setPassword(userDto.getPassword());
+        userLDAPDto.setDisplay_name(userLDAPDto.getFamily_name()+", "+userLDAPDto.getGiven_name());
         return userLDAPDto;
     }
 }

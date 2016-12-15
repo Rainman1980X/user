@@ -31,7 +31,7 @@ public class CreateCompanyAction {
         }
 
         try {
-            companyDto.setCompanyId(UUID.randomUUID().toString());
+            companyDto.setCompanyId(companyDto.getTenantId());
             CompanyDto newCompanyDto = companyRepository.save(companyDto);
             LoggerHelper.logData(Level.INFO, "Company successful created", correlationToken, authorization,
                     CreateCompanyAction.class.getName());

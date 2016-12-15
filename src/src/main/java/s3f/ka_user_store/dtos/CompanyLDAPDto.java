@@ -5,19 +5,19 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class CompanyLDAPDto {
-    private String tenant_id;
+    private String tenant_uuid;
     private String name1;
     private String vat_id;
     private String street;
     private String postal_code;
     private String city;
 
-    public String getTenant_id() {
-        return tenant_id;
+    public String getTenant_uuid() {
+        return tenant_uuid;
     }
 
-    public void setTenant_id(String tenant_id) {
-        this.tenant_id = tenant_id;
+    public void setTenant_uuid(String tenant_uuid) {
+        this.tenant_uuid = tenant_uuid;
     }
 
     public String getName1() {
