@@ -18,6 +18,6 @@ public class GetTenantIdByIdAction {
                     GetTenantIdByIdAction.class.getName());
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<String>(companyDtoTemp.getTenantId(), HttpStatus.OK);
+        return new ResponseEntity<String>(companyDtoTemp.getTenant_uuid(), HttpStatus.OK);
     }
 }

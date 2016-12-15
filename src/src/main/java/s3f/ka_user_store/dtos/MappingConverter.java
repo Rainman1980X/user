@@ -10,24 +10,11 @@ public final class MappingConverter {
     }
 
     public final static CompanyLDAPDto convert(final CompanyDto companyDto) {
-        CompanyLDAPDto companyLDAPDto = new CompanyLDAPDto();
-        companyLDAPDto.setCity(companyDto.getLocality());
-        companyLDAPDto.setName1(companyDto.getName());
-        companyLDAPDto.setPostal_code(companyDto.getZipcode());
-        companyLDAPDto.setStreet(companyDto.getStreet());
-        companyLDAPDto.setVat_id(companyDto.getVatId());
-        return companyLDAPDto;
+        return companyDto;
     }
 
     public final static CompanyDto convert(final CompanyLDAPDto companyLDAPDto) {
-        CompanyDto companyDto = new CompanyDto();
-        companyDto.setLocality(companyLDAPDto.getCity());
-        companyDto.setName(companyLDAPDto.getName1());
-        companyDto.setZipcode(companyLDAPDto.getPostal_code());
-        companyDto.setStreet(companyLDAPDto.getStreet());
-        companyDto.setVatId(companyLDAPDto.getVat_id());
-        companyDto.setTenantId(companyLDAPDto.getTenant_uuid());
-        return companyDto;
+        return new CompanyDto(companyLDAPDto.getTenant_uuid(),companyLDAPDto);
     }
 
     public final static UserLDAPDto convert(final UserDto userDto) {
