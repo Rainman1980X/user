@@ -15,10 +15,12 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
+import s3f.Application;
 import s3f.framework.deserialization.S3FDeseserializer;
 import s3f.framework.events.S3FEvent;
 import s3f.framework.logger.LoggerHelper;
 import s3f.framework.messaging.amqp.dto.RabbitMQContainer;
+import s3f.framework.messaging.amqp.error.ErrorMessageHandler;
 import s3f.framework.rest.DirectRestCallBuilder;
 import s3f.framework.rest.interfaces.RestCallPost;
 import s3f.framework.serialization.S3FSerializer;
@@ -27,14 +29,18 @@ import s3f.ka_user_store.dtos.MappingConverter;
 import s3f.ka_user_store.dtos.UserDto;
 import s3f.ka_user_store.dtos.UserLDAPDto;
 import s3f.ka_user_store.interfaces.UserRepository;
+import s3f.ka_user_store.services.LDAPUserService;
 
 public class CreateLDAPUserEventHandler extends DefaultConsumer {
 
+    private final LDAPUserService ldapUserService;
+    private final ErrorMessageHandler errorMessageHandler;
     private SecureRandom random = new SecureRandom();
     private String domainRouting;
     private DirectRestCallBuilder restCallBuilder;
     private RabbitMQContainer container;
-    private UserDto userDto;
+    private Map<String,String> userData;
+    //private UserDto userDto;
     private S3FDeseserializer s3fDeseserializer;
     private S3FSerializer s3fSerializer;
     private String user;
@@ -42,19 +48,16 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
     private String serviceGatewayHost;
     private UserRepository userRepository;
 
-    public CreateLDAPUserEventHandler(DirectRestCallBuilder restCallBuilder, RabbitMQContainer container,
-                                      String domainRouting, S3FDeseserializer s3fDeseserializer, S3FSerializer s3fSerializer, String user,
-                                      String password, String serviceGatewayHost, UserRepository userRepository) {
+    public CreateLDAPUserEventHandler(RabbitMQContainer container,
+                                      String domainRouting, S3FDeseserializer s3fDeseserializer, S3FSerializer s3fSerializer, UserRepository userRepository, LDAPUserService ldapUserService, ErrorMessageHandler errorMessageHandler) {
         super(container.getChannel());
-        this.restCallBuilder = restCallBuilder;
         this.container = container;
         this.domainRouting = domainRouting;
         this.s3fDeseserializer = s3fDeseserializer;
         this.s3fSerializer = s3fSerializer;
-        this.user = user;
-        this.password = password;
-        this.serviceGatewayHost = serviceGatewayHost;
         this.userRepository = userRepository;
+        this.ldapUserService = ldapUserService;
+        this.errorMessageHandler = errorMessageHandler;
     }
 
     @Override
@@ -63,14 +66,18 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
 
         if (envelope.getRoutingKey().equals(domainRouting + ".createUser")) {
             long deliveryTag = envelope.getDeliveryTag();
+            S3FEvent event = null;
             try {
-                S3FEvent event = eventParser(body);
-                createLDAPEntry();
-                (new CreateUserAction()).doActionOnUser(userRepository, null, event.getAuthorization(), event.getCorrelationId(), userDto);
+                event = s3fDeseserializer.deserialize(new String(body),S3FEvent.class);
+                userData = (Map<String,String>)event.getData();
+                UserLDAPDto userLDAPDto = ldapUserService.createLDAPUser(buildUserLDAPDtoFromMap(userData));
+                userData.put("userId",userLDAPDto.getAccount_uuid());
+                (new CreateUserAction()).doActionOnUser(userRepository, null, event.getAuthorization(), event.getCorrelationId(), buildUserFromMap(userData));
             } catch (Exception e) {
                 LoggerHelper.logData(Level.ERROR, "Handle Event fails", "Rabbit", "RabbitAuth",
                         this.getClass().getName(), e);
-
+                errorMessageHandler.publishErrorMessage(Application.serviceName,Application.version,e,userData,event,envelope);
+                container.getChannel().basicReject(envelope.getDeliveryTag(),false);
             } finally {
                 container.getChannel().basicAck(deliveryTag, false);
             }
@@ -81,26 +88,30 @@ public class CreateLDAPUserEventHandler extends DefaultConsumer {
     }
 
     private S3FEvent eventParser(byte[] body) throws IOException {
-
         S3FEvent event = s3fDeseserializer.deserialize(new String(body, Charset.defaultCharset()), S3FEvent.class);
-        userDto = s3fDeseserializer.deserialize(s3fSerializer.toJson(event.getData()), UserDto.class);
-        LoggerHelper.logData(Level.DEBUG, "Parse body " + userDto.toString(), "Rabbit", "RabbitAuth",
+        userData = s3fDeseserializer.deserializeAsMap(s3fSerializer.toJson(event.getData()));
+        LoggerHelper.logData(Level.DEBUG, "Parse body " + userData.toString(), "Rabbit", "RabbitAuth",
                 this.getClass().getName());
         return event;
     }
 
-    private void createLDAPEntry() throws Exception {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-        headers.put("Authorization",
-                "Basic " + Base64Utils.encodeToString((user + ":" + password).getBytes(Charset.defaultCharset())));
-        headers.put("Request-Id", nextSessionId());
-        Map<String, String> uri = new HashMap<>();
+    private UserLDAPDto buildUserLDAPDtoFromMap(Map<String,String> userData){
+        UserLDAPDto userLDAPDto = new UserLDAPDto();
+        userLDAPDto.setEmail(userData.get("email"));
+        userLDAPDto.setGiven_name(userData.get("givenname"));
+        userLDAPDto.setFamily_name(userData.get("surename"));
+        userLDAPDto.setPassword(userData.get("password"));
+        userLDAPDto.setDisplay_name(userLDAPDto.getFamily_name()+", "+userLDAPDto.getGiven_name());
+        return userLDAPDto;
+    }
 
-        RestCallPost<UserLDAPDto, UserLDAPDto> restCallPost = restCallBuilder.buildPost(serviceGatewayHost, null,
-                "/iam-integration/v1/persons", headers, uri, UserLDAPDto.class, MappingConverter.convert(userDto));
-        ResponseEntity<UserLDAPDto> responseEntity = restCallPost.execute();
-        userDto.setUserId(responseEntity.getBody().getAccount_uuid());
+    private UserDto buildUserFromMap(Map<String,String> userData){
+        UserDto dto =  new UserDto();
+        dto.setUserId(userData.get("userId"));
+        dto.setGivenname(userData.get("givenname"));
+        dto.setSurename(userData.get("surename"));
+        dto.setEmail(userData.get("email"));
+        return dto;
     }
 
     private String nextSessionId() {

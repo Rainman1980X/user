@@ -19,7 +19,7 @@ import s3f.framework.logger.LoggerHelper;
 public class Application implements ApplicationConstants {
     private static String[] args;
     public static final String version = "v1";
-    public final static String configServerAddress = "http://192.168.8.103:30000";
+    public final static String configServerAddress = "http://localhost:30000";
     public static final String configServiceAddress = "/api/v1/s3f-configuration/completion/{serviceName}/{version}/{lifecycle}/";
     public static String lifecycle;
     public final static String serviceName = "ka-user-store";

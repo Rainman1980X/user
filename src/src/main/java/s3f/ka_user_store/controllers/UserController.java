@@ -20,7 +20,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import s3f.ka_user_store.actions.user.ActivateUserAction;
-import s3f.ka_user_store.actions.user.ChangePasswordAction;
 import s3f.ka_user_store.actions.user.ChangeRoleListAction;
 import s3f.ka_user_store.actions.user.CreateUserAction;
 import s3f.ka_user_store.actions.user.DeactivateUserAction;
@@ -82,11 +81,12 @@ public class UserController {
     public ResponseEntity<HttpStatus> changePassword(@RequestHeader(value = "Authorization") String authorization,
             @RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userId") String userId,
             @PathVariable("password") String newPassword) {
-        Map<String, String> httpsValues = new HashMap<>();
+        /*Map<String, String> httpsValues = new HashMap<>();
         httpsValues.put("userId", userId);
         httpsValues.put("password", newPassword);
         return (new ChangePasswordAction()).doActionOnUser(userRepository, mongoTemplate, authorization,
-                correlationToken, httpsValues);
+                correlationToken, httpsValues);*/
+        return new ResponseEntity<HttpStatus>(HttpStatus.LOCKED);
     }
 
     @RequestMapping(value = "/api/v1/user-store/role/{companyId}/{userId}/{roles}", method = RequestMethod.POST)

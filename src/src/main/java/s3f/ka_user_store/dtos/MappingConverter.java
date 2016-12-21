@@ -17,13 +17,4 @@ public final class MappingConverter {
         return new CompanyDto(companyLDAPDto.getTenant_uuid(),companyLDAPDto);
     }
 
-    public final static UserLDAPDto convert(final UserDto userDto) {
-        UserLDAPDto userLDAPDto = new UserLDAPDto();
-        userLDAPDto.setEmail(userDto.getEmail());
-        userLDAPDto.setGiven_name(userDto.getGivenname());
-        userLDAPDto.setFamily_name(userDto.getSurename());
-        userLDAPDto.setPassword(userDto.getPassword());
-        userLDAPDto.setDisplay_name(userLDAPDto.getFamily_name()+", "+userLDAPDto.getGiven_name());
-        return userLDAPDto;
-    }
 }

@@ -20,7 +20,6 @@ public class UserDto {
     private String salutation;
     private String givenname;
     private String surename;
-    private String password; // it is a hashvalue!!
     private String email; // login
     private String telefon;
     private Date startAccess;
@@ -47,7 +46,6 @@ public class UserDto {
         this.salutation = salutation;
         this.givenname = givenname;
         this.surename = surename;
-        this.password = password;
         this.email = email;
         this.telefon = telefon;
         this.startAccess = startAccess;
@@ -75,9 +73,6 @@ public class UserDto {
         return surename;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public String getEmail() {
         return email;
@@ -117,10 +112,6 @@ public class UserDto {
 
     public void setSurename(String surename) {
         this.surename = surename;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setEmail(String email) {

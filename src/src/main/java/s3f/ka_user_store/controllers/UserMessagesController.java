@@ -13,11 +13,14 @@ import s3f.framework.deserialization.S3FDeseserializer;
 import s3f.framework.lifecycle.LifeCycle;
 import s3f.framework.logger.LoggerHelper;
 import s3f.framework.messaging.amqp.dto.RabbitMQContainer;
+import s3f.framework.messaging.amqp.error.ErrorMessageHandler;
+import s3f.framework.messaging.amqp.error.ErrorMessageHandlerFactory;
 import s3f.framework.messaging.amqp.job.configuration.JobChannelConfiguration;
 import s3f.framework.rest.DirectRestCallBuilder;
 import s3f.framework.serialization.S3FSerializer;
 import s3f.ka_user_store.events.CreateLDAPUserEventHandler;
 import s3f.ka_user_store.interfaces.UserRepository;
+import s3f.ka_user_store.services.LDAPUserService;
 
 @Service
 public class UserMessagesController {
@@ -41,6 +44,12 @@ public class UserMessagesController {
     private UserRepository userRepository;
 
 
+    private ErrorMessageHandler errorMessageHandler;
+
+    @Autowired
+    private LDAPUserService ldapUserService;
+
+
     private RabbitMQContainer jobContainer;
 
     private S3FDeseserializer s3fDeseserializer;
@@ -50,12 +59,13 @@ public class UserMessagesController {
     @Autowired
     public UserMessagesController(JobChannelConfiguration jobChannelConfiguration,
             S3FDeseserializer s3fDeseserializer,
-            S3FSerializer s3fSerializer, LifeCycle lifeCycle)
+            S3FSerializer s3fSerializer, LifeCycle lifeCycle, ErrorMessageHandlerFactory errorMessageHandlerFactory)
             throws RuntimeException {
         this.s3fDeseserializer = s3fDeseserializer;
         this.s3fSerializer = s3fSerializer;
         try {
             jobContainer = jobChannelConfiguration.build(lifeCycle.getKey());
+            errorMessageHandler = errorMessageHandlerFactory.buildErrorMessageHandler(lifeCycle.getKey());
         } catch (Exception e) {
             LoggerHelper.logData(Level.ERROR, "Can't build RabbitMQ job container", "LDAPuser", "LDAPuserAuth",
                     UserMessagesController.class.getName(), e);
@@ -65,11 +75,8 @@ public class UserMessagesController {
 
     @PostConstruct
     public void bindJenkinsNewDeploymentEvent() throws IOException {
-        CreateLDAPUserEventHandler createLDAPUserEventHandler = new CreateLDAPUserEventHandler(restCallBuilder,
-                jobContainer,
-                domainRouting,
-                s3fDeseserializer, s3fSerializer, user, password, serviceGatewayHost,userRepository);
-
+        CreateLDAPUserEventHandler createLDAPUserEventHandler = new CreateLDAPUserEventHandler(jobContainer, domainRouting,
+                s3fDeseserializer, s3fSerializer, userRepository, ldapUserService,errorMessageHandler);
         jobContainer.getChannel().queueBind(jobContainer.getQueue(), jobContainer.getExchange(), domainRouting + ".*");
         jobContainer.getChannel().basicConsume(jobContainer.getQueue(), false, domainRouting + ".*",
                 createLDAPUserEventHandler);

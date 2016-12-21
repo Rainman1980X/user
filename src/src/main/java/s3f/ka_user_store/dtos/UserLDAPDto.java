@@ -18,6 +18,8 @@ public class UserLDAPDto {
     private String password;
     private String account_uuid;
 
+
+
     public String getAccount_uuid() {
         return account_uuid;
     }

@@ -21,11 +21,12 @@ import java.util.Map;
 
 public class CreateUserJwtTokenAction {
 
+    @Deprecated
     public ResponseEntity<String> doAction(UserRepository repository, UserTokenConfigDto dto, String userEmail, String userPwd) {
         UserDto userDto = new GetUserByEmailAction().doActionOnUser(repository,"","",userEmail).getBody();
-        if(userDto==null||userDto.getPassword()==null||!userDto.getPassword().equals(userPwd)){
+       /* if(userDto==null||userDto.getPassword()==null||!userDto.getPassword().equals(userPwd)){
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-        }
+        }*/
         try {
             Map<String, Object> claims = new HashMap<>();
             claims.put("iss", URLDecoder.decode(dto.getIssuer()));
