@@ -90,7 +90,7 @@ public class LoginController {
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Password is correct and JWT generated", response = String.class),
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "User not found, Password not defined or Passwords do not match", response = String.class) })
     public ResponseEntity<String> getJwtByUserLogin(@RequestHeader(value = "Authorization",required = false) String authorization,@RequestHeader(value = "CorrelationToken") String correlationToken, @PathVariable("userEmail") String userEmail,@PathVariable("userPwd") String userPwd) {
-        return new ResponseEntity<String>(HttpStatus.GONE);
+        return new CreateUserJwtTokenAction().doAction(userRepository, userTokenConfigDto,userEmail,userPwd);
     }
     // /jwt/create-user/{uuid}?company=companyId
 
